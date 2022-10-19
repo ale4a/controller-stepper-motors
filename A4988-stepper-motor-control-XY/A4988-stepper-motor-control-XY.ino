@@ -18,7 +18,12 @@
 * 'RZn': move n steps relativ (sign determines direction)
 * 'AZn': move to absolute position n
 * 
-* KVJ 06-2021
+* steps  - cm
+* 80      0.1 cm 
+* 100     0.125 cm
+* 200     0.25 cm
+* 1000    1.25 cm
+* 
 */
 // defines pins numbers
 int stepPinX = 2; 
@@ -28,7 +33,7 @@ int dirPinY = 6;
 int stepPinZ = 4; 
 int dirPinZ = 7;
 int currentFrequency; // frequency in Hz (max value 1600 Hz for half step mode)
-int firstStepDelay;   // delay for stepper pulse duration
+int stepDelay;   // delay for stepper pulse duration
 int secondStepDelay;  // delay for stepper pulse duration
 
 int positionToMove; 
@@ -47,6 +52,11 @@ int inByteCount = 0;     // received bytes
 char serBuffer[16];
 String inDataStr = "";
 
+int MIN_STEP = 20;
+int MAX_STEP;
+int MIN_SPEED = 9000;
+int MAX_SPEED = 4000;
+
 void setup() {
   // Sets the three pins as Outputs
   pinMode(stepPinX,OUTPUT); 
@@ -55,11 +65,14 @@ void setup() {
   pinMode(dirPinY,OUTPUT);
   pinMode(stepPinZ,OUTPUT); 
   pinMode(dirPinZ,OUTPUT);
+
+  // min 1350
+
+  // MAX
+  stepDelay = 1500;
+  // MIN
+  //stepDelay = 10000;
   
-  currentFrequency = 200;     // default value
-  //myStepDelay=1000000 / currentFrequency/2;
-  firstStepDelay=400000 / currentFrequency;
-  secondStepDelay=600000 / currentFrequency;
   
   // default value of position
   absPositionx = 0; 
@@ -85,7 +98,9 @@ void loop() {
   }
   Serial.readBytes(serBuffer,inByteCount-1);
   serBuffer[inByteCount-2]='\0';
+ 
   String myStr=String(serBuffer);
+  Serial.println(myStr);
   
   switch(inCommandByte) {
     case 'I': 
@@ -98,21 +113,21 @@ void loop() {
       switch(inAxisByte) {
         case 'X':
           stepNo = myStr.toInt();
-          steps = moveAbsoulteNumberSteps(stepNo, firstStepDelay, secondStepDelay, stepPinX, dirPinX);
+          steps = moveAbsoulteNumberSteps(stepNo, stepDelay, secondStepDelay, stepPinX, dirPinX);
           absPositionx = absPositionx + steps;
           Serial.println("--------- Axis: X ---------" );
           showRelativePosition(myStr, steps);
           break;
         case 'Y':  
           stepNo = myStr.toInt();
-          steps = moveAbsoulteNumberSteps(stepNo, firstStepDelay, secondStepDelay, stepPinY, dirPinY);
+          steps = moveAbsoulteNumberSteps(stepNo, stepDelay, secondStepDelay, stepPinY, dirPinY);
           absPositiony = absPositiony + steps;
           Serial.println("--------- Axis: Y ---------" );
           showRelativePosition(myStr, steps);
           break;
         case 'Z':
           stepNo = myStr.toInt();
-          steps = moveAbsoulteNumberSteps(stepNo, firstStepDelay, secondStepDelay, stepPinZ, dirPinZ);
+          steps = moveAbsoulteNumberSteps(stepNo, stepDelay, secondStepDelay, stepPinZ, dirPinZ);
           absPositionz = absPositionz + steps;
           Serial.println("--------- Axis: Z ---------" );
           showRelativePosition(myStr, steps);
@@ -128,7 +143,7 @@ void loop() {
         case 'X':
           positionToMove = myStr.toInt();
           stepNo = positionToMove - absPositionx;
-          steps = moveAbsoulteNumberSteps(stepNo, firstStepDelay, secondStepDelay, stepPinX, dirPinX);
+          steps = moveAbsoulteNumberSteps(stepNo, stepDelay, secondStepDelay, stepPinX, dirPinX);
           absPositionx = absPositionx + steps;
           Serial.println("--------- Axis: X  ---------" );
           showAbsolutePosition(myStr, steps, absPositionx);
@@ -136,7 +151,7 @@ void loop() {
         case 'Y': 
           positionToMove=myStr.toInt();
           stepNo = positionToMove - absPositiony;
-          steps=moveAbsoulteNumberSteps(stepNo, firstStepDelay, secondStepDelay, stepPinY, dirPinY);
+          steps=moveAbsoulteNumberSteps(stepNo, stepDelay, secondStepDelay, stepPinY, dirPinY);
           absPositiony = absPositiony + steps;
           Serial.println("--------- Axis: Y  ---------" );
           showAbsolutePosition(myStr, steps, absPositiony);
@@ -144,7 +159,7 @@ void loop() {
         case 'Z':
           positionToMove=myStr.toInt();
           stepNo = positionToMove - absPositionz;
-          steps=moveAbsoulteNumberSteps(stepNo, firstStepDelay, secondStepDelay, stepPinZ, dirPinZ);
+          steps=moveAbsoulteNumberSteps(stepNo, stepDelay, secondStepDelay, stepPinZ, dirPinZ);
           absPositionz = absPositionz + steps;
           Serial.println("--------- Axis: Z  ---------" );
           showAbsolutePosition(myStr, steps, absPositionz);
@@ -157,12 +172,12 @@ void loop() {
    case 'F':
       Serial.write("new frequency: ");
       Serial.println(myStr);
-      currentFrequency=myStr.toInt();
-      //myStepDelay=1000000/currentFrequency/2;
-      firstStepDelay = 200000 / currentFrequency;
+      currentFrequency = myStr.toInt();
+      
+      stepDelay = 200000 / currentFrequency;
       secondStepDelay = 800000 / currentFrequency;
       Serial.write("step delay: ");
-      Serial.println(firstStepDelay + secondStepDelay);
+      Serial.println(stepDelay + secondStepDelay);
       break;
    case 'P':
       switch(inAxisByte) {
@@ -223,20 +238,37 @@ void showAbsolutePosition(String myStr, int numberSteps, int absPosition){
   Serial.println(absPosition);
 }
 
-int moveAbsoulteNumberSteps(int stepsNumberToDo, int firstStepDelay, int secondStepDelay, int stepPin, int directionPin){
+
+int getSpeed(int currentStep, int totalStep){
+  int currentSpeed = 0;
+  if( currentStep <= MIN_STEP ){
+    currentSpeed = map(currentStep, 0, MIN_STEP, MIN_SPEED, MAX_SPEED);
+  } else {
+    MAX_STEP = totalStep - MIN_STEP;
+    if (currentStep >= MAX_STEP){
+       currentSpeed = map(currentStep, MAX_STEP, totalStep, MAX_SPEED, MIN_SPEED);
+    } else {
+      currentSpeed = MAX_SPEED;
+    }
+  }
+  return currentSpeed;
+}
+
+int moveAbsoulteNumberSteps(int stepsNumberToDo, int stepDelay, int secondStepDelay, int stepPin, int directionPin){
   int motorDirection;
   if (stepsNumberToDo > 0) {
-    digitalWrite(directionPin,HIGH); // clockwise direction
-    motorDirection = 1;
-  } else {
-    digitalWrite(directionPin,LOW); // anticlockwise direction
+    digitalWrite(directionPin, LOW); // clockwise direction
     motorDirection = -1;
+  } else {
+    digitalWrite(directionPin,HIGH); // anticlockwise direction
+    motorDirection = 1;
   }
   for(int x = 0; x < abs(stepsNumberToDo); x++) {
+    int currentStepDelay = getSpeed(x, abs(stepsNumberToDo));
     digitalWrite(stepPin,HIGH); 
-    delayMicroseconds(firstStepDelay); 
+    delayMicroseconds(currentStepDelay / 2); 
     digitalWrite(stepPin,LOW); 
-    delayMicroseconds(secondStepDelay);
+    delayMicroseconds(currentStepDelay / 2); 
   }
   int stepCounter = abs(stepsNumberToDo) * motorDirection;
   return stepCounter;
