@@ -23,8 +23,8 @@
 * 100     0.125 cm
 * 200     0.25 cm
 * 1000    1.25 cm
-* 
 */
+
 // defines pins numbers
 int stepPinX = 2; 
 int dirPinX = 5;
@@ -43,7 +43,6 @@ int stepNo;           // steps to do
 int absPositionx;
 int absPositiony;
 int absPositionz;
-
 
 char inCommandByte = 0;   // 1st incoming serial byte
 char inAxisByte = 0;      // 2nd incomming byte
@@ -66,13 +65,8 @@ void setup() {
   pinMode(stepPinZ,OUTPUT); 
   pinMode(dirPinZ,OUTPUT);
 
-  // min 1350
 
-  // MAX
   stepDelay = 1500;
-  // MIN
-  //stepDelay = 10000;
-  
   
   // default value of position
   absPositionx = 0; 
@@ -264,11 +258,11 @@ int moveAbsoulteNumberSteps(int stepsNumberToDo, int stepDelay, int secondStepDe
     motorDirection = 1;
   }
   for(int x = 0; x < abs(stepsNumberToDo); x++) {
-    int currentStepDelay = getSpeed(x, abs(stepsNumberToDo));
+    int currentStepDelay = getSpeed(x, abs(stepsNumberToDo)) / 2;
     digitalWrite(stepPin,HIGH); 
-    delayMicroseconds(currentStepDelay / 2); 
+    delayMicroseconds(currentStepDelay); 
     digitalWrite(stepPin,LOW); 
-    delayMicroseconds(currentStepDelay / 2); 
+    delayMicroseconds(currentStepDelay); 
   }
   int stepCounter = abs(stepsNumberToDo) * motorDirection;
   return stepCounter;

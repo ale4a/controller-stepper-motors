@@ -44,7 +44,6 @@ def readOptions():
     else:
         print("Invalid input. Type on / off / quit.")
     
-
 if __name__ == '__main__':
     # Define the serial port and baud rate.
     # Ensure the 'COM#' corresponds to what was seen in the Windows Device Manager
