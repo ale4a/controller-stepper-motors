@@ -2,6 +2,7 @@
 
 import serial
 import time
+import serialPorts
 
 # movimient type; axis;  steps
 def verifyString(stringToVerify):
@@ -47,13 +48,21 @@ def readOptions():
 if __name__ == '__main__':
     # Define the serial port and baud rate.
     # Ensure the 'COM#' corresponds to what was seen in the Windows Device Manager
-    ser = serial.Serial('COM4', 9600)
-    time.sleep(2) # wait for the serial connection to initialize
 
-    while True:   
-        isClose = readOptions()
-        time.sleep(0.1)
-        if isClose:
-            break
+    a = serialPorts.connect()
+    print(a)
+    if len(a) != 0:
+            
+        ser = serial.Serial('COM4', 9600)
+        time.sleep(2) # wait for the serial connection to initialize
 
+        while True:   
+            
+            print(a)
+            isClose = readOptions()
+            time.sleep(0.1)
+            if isClose:
+                break
+    else:
+        pass
 
