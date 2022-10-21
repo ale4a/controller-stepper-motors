@@ -6,7 +6,6 @@ class ConectionPort(Frame):
     def __init__(self, parent = None):
         super().__init__()
         self.parent = parent
-        self.pack()
         self.createWidgets()
 
     def createWidgets(self):
@@ -56,10 +55,13 @@ class GUI(Frame):
         self.parent.geometry("900x500")
         self.parent.title('Software to scanner')
 
-        ConectionPort(self)
+        self.connectionPort = ConectionPort(self)
+        self.connectionPort.pack()
+
 
 if __name__ == "__main__":
     root = Tk()
     GUI(root).pack(side="top", fill="both", expand=True)
     root.mainloop()
 
+# https://stackoverflow.com/questions/17466561/best-way-to-structure-a-tkinter-application
