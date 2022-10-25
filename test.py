@@ -1,8 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter import filedialog
-from turtle import color
-import ConnectionPort
+
 
 class Counter_program():
     def __init__(self):
@@ -20,10 +19,24 @@ class Counter_program():
 
         # - - - - - - - - - - - - - - - - - - - - -
         # The Commands frame
+        # cmd_frame = ttk.LabelFrame(self.window, text="Commands", padx=5, pady=5, relief=tk.RIDGE)
         cmd_frame = ttk.LabelFrame(self.window, text="Commands", relief=tk.RIDGE)
-        ConnectionPort.ConnectionPort(cmd_frame)
         cmd_frame.grid(row=1, column=1, sticky=tk.E + tk.W + tk.N + tk.S)
 
+        button_label = ttk.Label(cmd_frame, text="tk.Button")
+        button_label.grid(row=1, column=1, sticky=tk.W, pady=3)
+
+        button_label = ttk.Label(cmd_frame, text="ttk.Button")
+        button_label.grid(row=2, column=1, sticky=tk.W, pady=3)
+
+        menu_label = ttk.Label(cmd_frame, text="Menu (see examples above)")
+        menu_label.grid(row=3, column=1, columnspan=2, sticky=tk.W, pady=3)
+
+        my_button = tk.Button(cmd_frame, text="do something")
+        my_button.grid(row=1, column=2)
+
+        my_button = ttk.Button(cmd_frame, text="do something")
+        my_button.grid(row=2, column=2)
 
         # - - - - - - - - - - - - - - - - - - - - -
         # The Data entry frame
@@ -114,7 +127,7 @@ class Counter_program():
         self.combobox_value = tk.StringVar()
         my_combobox = ttk.Combobox(fromlist_frame, height=4, textvariable=self.combobox_value)
         my_combobox.grid(row=2, column=2)
-        my_combobox['values'] = ("Choice oneasas", "Choice two", "Choice three", "Choice four")
+        my_combobox['values'] = ("Choice one", "Choice two", "Choice three", "Choice four")
         my_combobox.current(0)
 
         # - - - - - - - - - - - - - - - - - - - - -
