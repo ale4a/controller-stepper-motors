@@ -6,13 +6,10 @@ class ArduinoController():
     def __init__(self):
         super().__init__()
         a = serialPorts.connect()
-        
+        self.stateAnswer = False
+
     def connectArduino(self, port, baudrate):
         self.arduino = serial.Serial(port, baudrate, timeout=.1)
-
-    def readOptions(self, inputRead):
-        self.readOptions(inputRead)
-        time.sleep(0.1)
 
     # movimient type; axis;  steps
     def verifyString(self, stringToVerify):
@@ -31,6 +28,7 @@ class ArduinoController():
         self.arduino.close()
 
     def readOptions(self, valueInput):
+        time.sleep(0.1)
         if self.verifyString(valueInput):
             axisMovement, typeMovement, stepsMovement = self.getMotorMovement(valueInput)
             command =  typeMovement+ axisMovement + stepsMovement + "\n"
@@ -38,13 +36,18 @@ class ArduinoController():
             if typeMovement =="R":
                 time.sleep(0.1) 
                 self.arduino.write(bytes(command, 'utf-8'))
+                return True
             elif typeMovement =="A":
                 time.sleep(0.1)
                 self.arduino.write(bytes(command, 'utf-8'))
+                return True
             else:
-                print("Invalid input. Type on / off / quit.")
+                print("Invalid input.")
+                return False
         else:
-            print("Invalid input. Type on / off / quit.")
+            print("Invalid input")
+            return False
+
     
 if __name__ == '__main__':
     # Define the serial port and baud rate.
