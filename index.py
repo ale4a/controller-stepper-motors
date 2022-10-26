@@ -1,17 +1,19 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter import filedialog
-from turtle import color
-import ConnectionPort
+import components.ConnectionPort as ConnectionPort
+import components.CommandsConsole as CommandsConsole
+import components.ArduinoController as ArduinoController
 
 class Counter_program():
     def __init__(self):
         self.window = tk.Tk()
         self.window.title("tk Examples")
-        self.create_widgets()
-
+        self.arduino = ArduinoController.ArduinoController()
         self.radio_variable = tk.StringVar()
         self.combobox_value = tk.StringVar()
+        self.create_widgets()
+
 
     def create_widgets(self):
         # Create some room around all the internal frames
@@ -21,47 +23,48 @@ class Counter_program():
         # - - - - - - - - - - - - - - - - - - - - -
         # The Commands frame
         cmd_frame = ttk.LabelFrame(self.window, text="Commands", relief=tk.RIDGE)
-        ConnectionPort.ConnectionPort(cmd_frame)
+        ConnectionPort.ConnectionPort(cmd_frame, self.arduino)
         cmd_frame.grid(row=1, column=1, sticky=tk.E + tk.W + tk.N + tk.S)
-
 
         # - - - - - - - - - - - - - - - - - - - - -
         # The Data entry frame
         entry_frame = ttk.LabelFrame(self.window, text="Data Entry",
                                      relief=tk.RIDGE)
+        CommandsConsole.CommandsConsole(entry_frame, self.arduino)
         entry_frame.grid(row=2, column=1, sticky=tk.E + tk.W + tk.N + tk.S)
 
-        entry_label = ttk.Label(entry_frame, text="ttk.Entry")
-        entry_label.grid(row=1, column=1, sticky=tk.W + tk.N)
 
-        text_label = ttk.Label(entry_frame, text="tk.Text")
-        text_label.grid(row=2, column=1, sticky=tk.W + tk.N)
+        # entry_label = ttk.Label(entry_frame, text="ttk.Entry")
+        # entry_label.grid(row=1, column=1, sticky=tk.W + tk.N)
 
-        scale_label = ttk.Label(entry_frame, text="tk.Scale")
-        scale_label.grid(row=4, column=1, sticky=tk.W)
+        # text_label = ttk.Label(entry_frame, text="tk.Text")
+        # text_label.grid(row=2, column=1, sticky=tk.W + tk.N)
 
-        scale_label2 = ttk.Label(entry_frame, text="ttk.Scale")
-        scale_label2.grid(row=5, column=1, sticky=tk.W)
+        # scale_label = ttk.Label(entry_frame, text="tk.Scale")
+        # scale_label.grid(row=4, column=1, sticky=tk.W)
 
-        my_entry = ttk.Entry(entry_frame, width=40)
-        my_entry.grid(row=1, column=2, sticky=tk.W, pady=3)
-        my_entry.insert(tk.END, "Test")
+        # scale_label2 = ttk.Label(entry_frame, text="ttk.Scale")
+        # scale_label2.grid(row=5, column=1, sticky=tk.W)
 
-        my_text = tk.Text(entry_frame, height=5, width=30)
-        my_text.grid(row=2, column=2)
-        my_text.insert(tk.END, "An example of multi-line\ninput")
+        # my_entry = ttk.Entry(entry_frame, width=40)
+        # my_entry.grid(row=1, column=2, sticky=tk.W, pady=3)
+        # my_entry.insert(tk.END, "Test")
 
-        my_spinbox = tk.Spinbox(entry_frame, from_=0, to=10, width=5, justify=tk.RIGHT)
-        my_spinbox.grid(row=3, column=2, sticky=tk.W, pady=3)
+        # my_text = tk.Text(entry_frame, height=5, width=30)
+        # my_text.grid(row=2, column=2)
+        # my_text.insert(tk.END, "An example of multi-line\ninput")
 
-        my_scale = tk.Scale(entry_frame, from_=0, to=100, orient=tk.HORIZONTAL,
-                            width=8, length=200)
-        my_scale.grid(row=4, column=2, sticky=tk.W)
+        # my_spinbox = tk.Spinbox(entry_frame, from_=0, to=10, width=5, justify=tk.RIGHT)
+        # my_spinbox.grid(row=3, column=2, sticky=tk.W, pady=3)
 
-        my_scale = ttk.Scale(entry_frame, from_=0, to=100, orient=tk.HORIZONTAL,
-                             length=200)
+        # my_scale = tk.Scale(entry_frame, from_=0, to=100, orient=tk.HORIZONTAL,
+        #                     width=8, length=200)
+        # my_scale.grid(row=4, column=2, sticky=tk.W)
 
-        my_scale.grid(row=5, column=2, sticky=tk.W)
+        # my_scale = ttk.Scale(entry_frame, from_=0, to=100, orient=tk.HORIZONTAL,
+        #                      length=200)
+
+        # my_scale.grid(row=5, column=2, sticky=tk.W)
 
     # - - - - - - - - - - - - - - - - - - - - -
         # The Choices frame

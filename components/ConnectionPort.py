@@ -1,26 +1,18 @@
-
-
-
-
-
-
-
-
 # Use Tkinter for python 2, tkinter for python 3
-from tkinter import Tk, RIGHT, BOTH, RAISED, LEFT
-from tkinter import Tk, LabelFrame, Label, StringVar, W
-from tkinter import Frame, OptionMenu, Button
+from tkinter import Tk, LEFT
+from tkinter import Tk, Label, StringVar, W
+from tkinter import Frame, Button
 from tkinter.ttk import Combobox
-
 import sys
 import glob
 import serial
 
 class ConnectionPort(Frame):
-    def __init__(self, parent = None):
+    def __init__(self, parent, arduino):
         super().__init__()
         self.parent = parent
         self.createWidgets()
+        self.arduino = arduino
         self.portsComboboxValue = StringVar()
         self.rateComoboboxValue = StringVar()
 
@@ -66,7 +58,6 @@ class ConnectionPort(Frame):
             portsCombobox = Combobox(self.parent, height=4, textvariable=self.portsComboboxValue)
             portsCombobox.grid(row=0, column=1)
             portsCombobox['values'] = self.ports
-            portsCombobox.current(0)
             portsCombobox.bind("<<ComboboxSelected>>", self.onSelectPortName)
         except TypeError:
             # display an error, prompt for something that will allow a retry, whatever
@@ -75,7 +66,6 @@ class ConnectionPort(Frame):
         # label portsComboboxValue   
         self.outputPortNameLabel = Label(self.parent, foreground='red')
         self.outputPortNameLabel.grid(row = 1, column = 1, sticky = W)
-
 
         # bauteRateLabel
         self.bauteRateLabel = Label(self.parent, text="Baound Rate: ", width = 11)
@@ -86,7 +76,7 @@ class ConnectionPort(Frame):
             rateComobobox = Combobox(self.parent, height=4, textvariable=self.rateComoboboxValue)
             rateComobobox.grid(row = 2, column = 1)
             rateComobobox['values'] = self.rate
-            rateComobobox.current(0)
+            print(self.rateComoboboxValue)
             rateComobobox.bind("<<ComboboxSelected>>", self.onSelectRate)
         except TypeError:
             # display an error, prompt for something that will allow a retry, whatever
@@ -96,11 +86,22 @@ class ConnectionPort(Frame):
         self.outputBauteRateLabel = Label(self.parent, foreground='red')
         self.outputBauteRateLabel.grid(row = 3, column = 1, sticky = W)
 
+        self.buttonConnection = Button(self.parent, text="Connect arduino", command=self.connectArduino)
+        self.buttonConnection.grid(row = 0, column = 2)
 
+    def connectArduino(self):
+        try:
+            self.arduino.connectArduino(self.PORT, self.RATE)
+        except:
+            print("some is wrong when connect arduino")
+
+        
     def onSelectPortName(self, event):
+        self.PORT= event.widget.get()
         self.outputPortNameLabel['text'] = f'You selected: {event.widget.get()}'
         
     def onSelectRate(self, event):
+        self.RATE = event.widget.get()
         self.outputBauteRateLabel['text'] = f'You selected: {event.widget.get()}'
 
     def connectPorts(self):
@@ -136,8 +137,7 @@ class GUI(Frame):
         self.parent = parent
         self.parent.geometry("500x300")
         self.parent.title('Software to scanner')
-
-        self.connectionPort = ConnectionPort(self)
+        self.connectionPort = ConnectionPort(self, '*ARDUINO*')
         self.connectionPort.pack(side = LEFT)
 
 
@@ -145,5 +145,3 @@ if __name__ == "__main__":
     root = Tk()
     GUI(root).pack(side="top", fill="both", expand=True)
     root.mainloop()
-
-# https://stackoverflow.com/questions/17466561/best-way-to-structure-a-tkinter-application
