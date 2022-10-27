@@ -1,7 +1,7 @@
 # Use Tkinter for python 2, tkinter for python 3
 from tkinter import Tk, NORMAL , DISABLED, LEFT, END, W
 from tkinter import Tk, Label, Entry
-from tkinter import Frame, Text, Button
+from tkinter import Frame, Button
 from tkinter import scrolledtext
 
 class CommandsConsole(Frame):

@@ -36,7 +36,7 @@ class Counter_program():
         # - - - - - - - - - - - - - - - - - - - - -
         # The Choices frame
         switch_frame = ttk.LabelFrame(self.window, text="Direcctions", relief=tk.RIDGE, padding=6)
-        ArrowControl.ArrowControl(switch_frame)
+        ArrowControl.ArrowControl(switch_frame, self.arduino)
         switch_frame.grid(row=2, column=2, padx=6, sticky=tk.E + tk.W + tk.N + tk.S)
 
         # - - - - - - - - - - - - - - - - - - - - -
