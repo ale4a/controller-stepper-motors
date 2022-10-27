@@ -1,5 +1,5 @@
 # Use Tkinter for python 2, tkinter for python 3
-from tkinter import Tk, LEFT
+from tkinter import E, Tk, LEFT
 from tkinter import Tk, Label, StringVar, W
 from tkinter import Frame, Button
 from tkinter.ttk import Combobox
@@ -11,13 +11,12 @@ class ConnectionPort(Frame):
     def __init__(self, parent, arduino):
         super().__init__()
         self.parent = parent
-        self.createWidgets()
         self.arduino = arduino
         self.portsComboboxValue = StringVar()
         self.rateComoboboxValue = StringVar()
+        self.createWidgets()
 
     def createWidgets(self):
-        # initialize data
         self.ports = self.connectPorts()
         if(len(self.ports) != 0):
             self.showConnection()
@@ -33,25 +32,19 @@ class ConnectionPort(Frame):
         if (len(self.ports) != 0):
             self.schaltf1.destroy()
             self.label1.destroy()
-            self.portNameLabelss.destroy()
             self.showConnection()
 
     def showEmptyConnection(self):
-        # portNameLabel
-        self.portNameLabelss = Label(self.parent, text="Port name:")
-        self.portNameLabelss.grid(row = 0, column = 0)
-
         self.label1 = Label(self.parent, text="Devices not detected ...")
         self.label1.grid(row = 0, column = 0)
         
         self.schaltf1 = Button(self.parent, text="Reload", command=self.searchPorts)
-        self.schaltf1.grid(row = 0, column = 1)
+        self.schaltf1.grid(row = 0, column = 1, padx=10)
 
     def selectPort(self):
-        self.rate = ['9600', '10000', '1200']
-        # portNameLabel
-        self.portNameLabel = Label(self.parent, text = "Port name:")
-        self.portNameLabel.grid(row = 0, column = 0)
+        self.rate = ['9600']
+        self.portNameLabel = Label(self.parent, text = "Port name: ")
+        self.portNameLabel.grid(row = 0, column = 0, sticky = W)
 
         try:
             self.portsComboboxValue = StringVar()
@@ -60,42 +53,51 @@ class ConnectionPort(Frame):
             portsCombobox['values'] = self.ports
             portsCombobox.bind("<<ComboboxSelected>>", self.onSelectPortName)
         except TypeError:
-            # display an error, prompt for something that will allow a retry, whatever
             print("Something is wrong with select port")
 
-        # label portsComboboxValue   
         self.outputPortNameLabel = Label(self.parent, foreground='red')
         self.outputPortNameLabel.grid(row = 1, column = 1, sticky = W)
 
-        # bauteRateLabel
-        self.bauteRateLabel = Label(self.parent, text="Baound Rate: ", width = 11)
-        self.bauteRateLabel.grid(row = 2, column = 0)
+        self.bauteRateLabel = Label(self.parent, text="Baound Rate: ")
+        self.bauteRateLabel.grid(row = 2, column = 0, sticky = W)
         
         try:
             self.rateComoboboxValue = StringVar()
             rateComobobox = Combobox(self.parent, height=4, textvariable=self.rateComoboboxValue)
             rateComobobox.grid(row = 2, column = 1)
             rateComobobox['values'] = self.rate
-            print(self.rateComoboboxValue)
             rateComobobox.bind("<<ComboboxSelected>>", self.onSelectRate)
         except TypeError:
-            # display an error, prompt for something that will allow a retry, whatever
             print("Something is wrong with select rate")
 
-        # label rateComoboboxValue   
         self.outputBauteRateLabel = Label(self.parent, foreground='red')
         self.outputBauteRateLabel.grid(row = 3, column = 1, sticky = W)
 
-        self.buttonConnection = Button(self.parent, text="Connect arduino", command=self.connectArduino)
-        self.buttonConnection.grid(row = 0, column = 2)
+        self.buttonConnection = Button(self.parent, text="Connect", command=self.connectArduino)
+        self.buttonConnection.grid(row = 0, column = 2, padx=5)
+
+        self.buttonConnection = Button(self.parent, text="Disconnect", command=self.disconnectArduino)
+        self.buttonConnection.grid(row = 0, column = 3, padx=5)
+
+        self.outputConnectedLabel = Label(self.parent, foreground='green')
+        self.outputConnectedLabel.grid(row = 2, column = 2, columnspan=2, rowspan=1)
+
+    def disconnectArduino(self):
+        try:
+            self.outputConnectedLabel['text'] = f'You are disconnected!!'
+            self.outputConnectedLabel['foreground'] = 'red'
+            self.arduino.closeConnection()
+        except:
+            print("some is wrong when disconnect arduino")
 
     def connectArduino(self):
         try:
             self.arduino.connectArduino(self.PORT, self.RATE)
+            self.outputConnectedLabel['text'] = f'You are connected!!'
+            self.outputConnectedLabel['foreground'] = 'green'
         except:
             print("some is wrong when connect arduino")
 
-        
     def onSelectPortName(self, event):
         self.PORT= event.widget.get()
         self.outputPortNameLabel['text'] = f'You selected: {event.widget.get()}'
