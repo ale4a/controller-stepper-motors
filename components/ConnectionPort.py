@@ -28,7 +28,6 @@ class ConnectionPort(Frame):
     
     def searchPorts(self):
         self.ports = self.connectPorts()
-
         if (len(self.ports) != 0):
             self.schaltf1.destroy()
             self.label1.destroy()
@@ -36,7 +35,7 @@ class ConnectionPort(Frame):
 
     def showEmptyConnection(self):
         self.label1 = Label(self.parent, text="Devices not detected ...")
-        self.label1.grid(row = 0, column = 0)
+        self.label1.grid(row = 0, column = 0, padx= 70, pady = 30)
         
         self.schaltf1 = Button(self.parent, text="Reload", command=self.searchPorts)
         self.schaltf1.grid(row = 0, column = 1, padx=10)
