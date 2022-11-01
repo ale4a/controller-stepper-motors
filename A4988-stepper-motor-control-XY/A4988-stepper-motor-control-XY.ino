@@ -65,7 +65,6 @@ void setup() {
   pinMode(stepPinZ,OUTPUT); 
   pinMode(dirPinZ,OUTPUT);
 
-
   stepDelay = 1500;
   
   // default value of position

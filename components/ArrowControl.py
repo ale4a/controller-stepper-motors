@@ -1,54 +1,70 @@
 # Use Tkinter for python 2, tkinter for python 3
 from tkinter import Tk, LEFT, END
 from tkinter import Tk, Label
-from tkinter import Frame, Button, Entry
+from tkinter import Frame, Button, Entry, StringVar
+import components.Messages as Messages
 import tkinter.font as font
+import time
 
 class ArrowControl(Frame):
     def __init__(self, parent, arduino):
         super().__init__()
         self.parent = parent
         self.arduino = arduino
-        self.steps = 200
+        self.steps =  StringVar()
+        self.messages = Messages.Messages()
+        self.totalSteps = 100
         self.createWidgets()
 
     def relativeMovement(self, axis, steps):
         res = "R"+ ";" + axis + ";" + str(steps)
         try:
             stateAnswer = self.arduino.readOptions(res)
-            if(stateAnswer != True):
+            if(not stateAnswer):
                 self.textCommand.insert(END, "Invalid input.\n")
-            else:
-                print(stateAnswer)
-        except:
-            print("error")
+                self.messages.popupShowinfo("Error", "Invalid input")
+        except Exception as e:
+            self.messages.popupShowinfo("Error", e)
+
+    def absoluteMovement(self, axis, steps):
+        res = "A"+ ";" + axis + ";" + str(steps)
+        try:
+            stateAnswer = self.arduino.readOptions(res)
+            if(not stateAnswer):
+                self.textCommand.insert(END, "Invalid input.\n")
+                self.messages.popupShowinfo("Error", "Invalid input")
+        except Exception as e:
+            print(e)
+            self.messages.popupShowinfo("Error", "Problems with connection with arduino")
 
     def yPositive(self):
-        self.relativeMovement("Y",self.steps)
-        print("yPositive")
+        self.relativeMovement("Y",self.totalSteps)
 
     def yNegative(self):
-        self.relativeMovement("Y",-self.steps)
-        print("yNegative")
+        self.relativeMovement("Y",-self.totalSteps)
 
     def xPositive(self):
-        self.relativeMovement("X",self.steps)
-        print("xPositive")
+        self.relativeMovement("X",self.totalSteps)
 
     def xNegative(self):
-        self.relativeMovement("X",-self.steps)
-        print("xNegative")
+        self.relativeMovement("X",-self.totalSteps)
     
     def zPositive(self):
-        self.relativeMovement("Z",self.steps)
-        print("zPositive")
+        self.relativeMovement("Z",self.totalSteps)
     
     def zNegative(self):
-        self.relativeMovement("Z",-self.steps)
-        print("zNegative")
+        self.relativeMovement("Z",-self.totalSteps)
+    
+    def setPosition(self):
+        self.absoluteMovement("X", 0)
+        time.sleep(1)
+        self.absoluteMovement("Y", 0)
+        time.sleep(1)
+        self.absoluteMovement("Z", 0)
+        time.sleep(1)
     
     def createWidgets(self):
-        padding = {"padx": 5, "pady": 5}
+        padding = {"padx": 10, "pady": 10}
         stylesOptions = {
             "width": 5,
             "height": 2,
@@ -75,12 +91,20 @@ class ArrowControl(Frame):
         self.leftButton.grid(row = 1, column = 4, **padding)
 
         self.stepLabel = Label(self.parent, text = "Steps")
-        self.stepLabel.grid(row = 3, column = 0)
+        self.stepLabel.grid(row = 3, column = 0, pady = 20)
 
-        self.stepEntry = Entry(self.parent, width=8)
-        self.stepEntry.insert ( END, self.steps )
-        self.stepEntry.grid(row = 3, column = 1)
-    
+        self.steps.trace("w", lambda name, index, mode, sv=self.steps: self.updateStepCallback(sv))
+        self.stepEntry = Entry(self.parent, width=8,  textvariable = self.steps)
+        self.stepEntry.insert ( END, self.totalSteps )
+        self.stepEntry.grid(row = 3, column = 1, pady = 20)
+
+        self.leftButton = Button(self.parent, text="Reset position [0, 0, 0]", command=self.setPosition)
+        self.leftButton.grid(row = 3, column = 2, **padding, columnspan=3)
+
+    def updateStepCallback(self, sev):
+        if not self.steps.get()=='':
+            self.totalSteps = int(self.steps.get())
+        
 class GUI(Frame):
     def __init__(self, parent, *args, **kwargs):
         super().__init__(parent)
@@ -89,7 +113,6 @@ class GUI(Frame):
         self.parent.title('Software to scanner')
         self.connectionPort = ArrowControl(self)
         self.connectionPort.pack(side = LEFT)
-
 
 if __name__ == "__main__":
     root = Tk()

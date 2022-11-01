@@ -3,12 +3,14 @@ from tkinter import Tk, NORMAL , DISABLED, LEFT, END, W
 from tkinter import Tk, Label, Entry
 from tkinter import Frame, Button
 from tkinter import scrolledtext
+import components.Messages as Messages
 
 class CommandsConsole(Frame):
     def __init__(self, parent, arduino):
         super().__init__()
         self.arduino = arduino
         self.parent = parent
+        self.messages = Messages.Messages()
         self.createWidgets()
 
     def cleanText(self):
@@ -17,29 +19,35 @@ class CommandsConsole(Frame):
         self.textCommand.config(state=DISABLED)
 
     def sendCommand(self):
-        self.commandToSend = self.inputCommand.get()
-        self.textCommand.config(state=NORMAL)
-        self.textCommand.insert(END, "> "+self.commandToSend + '\n')
-        self.arduino.readOptions(self.commandToSend)
-        stateAnswer = self.arduino.readOptions(self.commandToSend)
-        if(stateAnswer != True):
-            self.textCommand.insert(END, "Invalid input.\n")
-        else:
-            print(stateAnswer)
-        self.textCommand.config(state=DISABLED)
-        self.inputCommand.delete(0, END)
+        try:
+            self.commandToSend = self.inputCommand.get()
+            self.textCommand.config(state=NORMAL)
+            self.textCommand.insert(END, "> "+self.commandToSend + '\n')
+            self.arduino.readOptions(self.commandToSend)
+            stateAnswer = self.arduino.readOptions(self.commandToSend)
+            if(stateAnswer != True):
+                self.textCommand.insert(END, "Invalid input.\n")
+            self.textCommand.config(state=DISABLED)
+        except Exception as e:
+            self.messages.popupShowinfo("Error", "Problems with arduino connection")
+        finally: 
+            self.inputCommand.delete(0, END)
+
 
     def sendCommandWithEnter(self, env):
-        self.commandToSend = self.inputCommand.get()
-        self.textCommand.config(state=NORMAL)
-        self.textCommand.insert(END, "> "+self.commandToSend + '\n')
-        stateAnswer = self.arduino.readOptions(self.commandToSend)
-        if(stateAnswer != True):
-            self.textCommand.insert(END, "Invalid input.\n")
-        else:
-            print(stateAnswer)
-        self.textCommand.config(state=DISABLED)
-        self.inputCommand.delete(0, END)
+        try:
+            self.commandToSend = self.inputCommand.get()
+            self.textCommand.config(state=NORMAL)
+            self.textCommand.insert(END, "> "+self.commandToSend + '\n')
+            stateAnswer = self.arduino.readOptions(self.commandToSend)
+            if(stateAnswer != True):
+                self.textCommand.insert(END, "Invalid input.\n")
+                self.messages.popupShowinfo("Error", "Invalid input")
+            self.textCommand.config(state=DISABLED)
+        except Exception as e:
+            self.messages.popupShowinfo("Error", "Problems with arduino connection")
+        finally: 
+            self.inputCommand.delete(0, END)
 
     def createWidgets(self):
         commandLabel = Label(self.parent, text="Command:")

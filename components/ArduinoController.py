@@ -1,15 +1,12 @@
 import serial
 import time
-import serialPorts
 
 class ArduinoController():
     def __init__(self, absPosition, statusDisplay):
         super().__init__()
-        serialPorts.connect()
         self.absPosition = absPosition
         self.stateAnswer = False
         self.statusDisplay  = statusDisplay
-        print(self.absPosition)
 
     # movimient type; axis; steps
     def verifyString(self, stringToVerify):
@@ -66,10 +63,8 @@ class ArduinoController():
                 self.statusDisplay.updateAxis()
                 return True
             else:
-                print("Invalid input.")
                 return False
         else:
-            print("Invalid input")
             return False
 
 if __name__ == '__main__':

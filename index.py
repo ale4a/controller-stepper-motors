@@ -11,8 +11,7 @@ class Counter_program():
         self.window = tk.Tk()
         self.window.title("Steps Motors")
         self.absPosition = [0, 0, 0]
-        self.fromlist_frame = ttk.LabelFrame(self.window, text="Absolute position",
-                                        relief=tk.RIDGE)
+        self.fromlist_frame = ttk.LabelFrame(self.window, text="Absolute position", relief=tk.RIDGE)
         self.statusDisplay = CoordinateState.CoordinateState(self.fromlist_frame, self.absPosition)
         self.arduino = ArduinoController.ArduinoController(self.absPosition, self.statusDisplay)
         self.radio_variable = tk.StringVar()
@@ -26,9 +25,9 @@ class Counter_program():
 
         # - - - - - - - - - - - - - - - - - - - - -
         # The Commands frame
-        connectionArduinoFrame = ttk.LabelFrame(self.window, text="Connection Arduino", relief=tk.RIDGE)
-        ConnectionPort.ConnectionPort(connectionArduinoFrame, self.arduino)
-        connectionArduinoFrame.grid(row=1, column=1, sticky=tk.E + tk.W + tk.N + tk.S)
+        connectionPortFrame = ttk.LabelFrame(self.window, text="Connection Arduino", relief=tk.RIDGE)
+        ConnectionPort.ConnectionPort(connectionPortFrame, self.arduino)
+        connectionPortFrame.grid(row=1, column=1, sticky=tk.E + tk.W + tk.N + tk.S)
 
         # - - - - - - - - - - - - - - - - - - - - -
         # The Data entry frame
@@ -42,9 +41,9 @@ class Counter_program():
         
         # - - - - - - - - - - - - - - - - - - - - -
         # Direcctions
-        direcctionFrame = ttk.LabelFrame(self.window, text="Direcctions", relief=tk.RIDGE, padding=6)
-        ArrowControl.ArrowControl(direcctionFrame, self.arduino)
-        direcctionFrame.grid(row=2, column=2, padx=6, sticky=tk.E + tk.W + tk.N + tk.S)
+        arrowControlFrame = ttk.LabelFrame(self.window, text="Arrow control", relief=tk.RIDGE, padding=6)
+        ArrowControl.ArrowControl(arrowControlFrame, self.arduino)
+        arrowControlFrame.grid(row=2, column=2, padx=6, sticky=tk.E + tk.W + tk.N + tk.S)
 
 # Create the entire GUI program
 program = Counter_program()
