@@ -3,10 +3,12 @@ import time
 import serialPorts
 
 class ArduinoController():
-    def __init__(self):
+    def __init__(self, absPosition):
         super().__init__()
         serialPorts.connect()
+        self.absPosition = absPosition
         self.stateAnswer = False
+        print(self.absPosition)
 
     # movimient type; axis; steps
     def verifyString(self, stringToVerify):
@@ -39,15 +41,30 @@ class ArduinoController():
         time.sleep(0.1)
         if self.verifyString(valueInput):
             axisMovement, typeMovement, stepsMovement = self.getMotorMovement(valueInput)
-            command =  typeMovement+ axisMovement + stepsMovement + "\n"
+            command =  typeMovement + axisMovement + stepsMovement + "\n"
             print('typeMovement', stepsMovement)
             if typeMovement =="R":
-                time.sleep(0.1) 
+                time.sleep(0.1)
                 self.arduino.write(bytes(command, 'utf-8'))
+                if axisMovement == "X":
+                    self.absPosition[0] = self.absPosition[0] + int(stepsMovement)
+                elif axisMovement == "Y":
+                    self.absPosition[1] = self.absPosition[1] + int(stepsMovement)
+                elif axisMovement == "Z":
+                    self.absPosition[2] = self.absPosition[2] + int(stepsMovement)
                 return True
             elif typeMovement =="A":
                 time.sleep(0.1)
                 self.arduino.write(bytes(command, 'utf-8'))
+                if axisMovement == "X":
+                    self.absPosition[0] = int(stepsMovement)
+                    print(self.absPosition)
+                elif axisMovement == "Y":
+                    self.absPosition[1] = int(stepsMovement)
+                    print(self.absPosition)
+                elif axisMovement == "Z":
+                    self.absPosition[2] = int(stepsMovement)
+                    print(self.absPosition)
                 return True
             else:
                 print("Invalid input.")

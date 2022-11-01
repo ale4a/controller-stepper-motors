@@ -9,12 +9,12 @@ import components.ArrowControl as ArrowControl
 class Counter_program():
     def __init__(self):
         self.window = tk.Tk()
-        self.window.title("tk Examples")
-        self.arduino = ArduinoController.ArduinoController()
+        self.window.title("Steps Motors")
+        self.absPosition = [0, 0, 0]
+        self.arduino = ArduinoController.ArduinoController(self.absPosition)
         self.radio_variable = tk.StringVar()
         self.combobox_value = tk.StringVar()
         self.create_widgets()
-
 
     def create_widgets(self):
         # Create some room around all the internal frames
@@ -64,21 +64,21 @@ class Counter_program():
 
         # - - - - - - - - - - - - - - - - - - - - -
         # Menus
-        menubar = tk.Menu(self.window)
+        # menubar = tk.Menu(self.window)
 
-        filemenu = tk.Menu(menubar, tearoff=0)
-        filemenu.add_command(label="Open", command=filedialog.askopenfilename)
-        filemenu.add_command(label="Save", command=filedialog.asksaveasfilename)
-        filemenu.add_separator()
-        filemenu.add_command(label="Exit", command=self.window.quit)
-        menubar.add_cascade(label="File", menu=filemenu)
+        # filemenu = tk.Menu(menubar, tearoff=0)
+        # filemenu.add_command(label="Open", command=filedialog.askopenfilename)
+        # filemenu.add_command(label="Save", command=filedialog.asksaveasfilename)
+        # filemenu.add_separator()
+        # filemenu.add_command(label="Exit", command=self.window.quit)
+        # menubar.add_cascade(label="File", menu=filemenu)
 
-        self.window.config(menu=menubar)
+        # self.window.config(menu=menubar)
 
         # - - - - - - - - - - - - - - - - - - - - -
         # Quit button in the lower right corner
-        quit_button = ttk.Button(self.window, text="Quit", command=self.window.destroy)
-        quit_button.grid(row=1, column=3)
+        # quit_button = ttk.Button(self.window, text="Quit", command=self.window.destroy)
+        # quit_button.grid(row=1, column=3)
 
 # Create the entire GUI program
 program = Counter_program()

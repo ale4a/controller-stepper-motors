@@ -107,22 +107,22 @@ void loop() {
       switch(inAxisByte) {
         case 'X':
           stepNo = myStr.toInt();
-          steps = moveAbsoulteNumberSteps(stepNo, stepDelay, secondStepDelay, stepPinX, dirPinX);
-          absPositionx = absPositionx + steps;
+          moveAbsoulteNumberSteps(stepNo, stepDelay, secondStepDelay, stepPinX, dirPinX);
+          absPositionx = absPositionx + stepNo;
           Serial.println("--------- Axis: X ---------" );
           showRelativePosition(myStr, steps);
           break;
         case 'Y':  
           stepNo = myStr.toInt();
-          steps = moveAbsoulteNumberSteps(stepNo, stepDelay, secondStepDelay, stepPinY, dirPinY);
-          absPositiony = absPositiony + steps;
+          moveAbsoulteNumberSteps(stepNo, stepDelay, secondStepDelay, stepPinY, dirPinY);
+          absPositiony = absPositiony + stepNo;
           Serial.println("--------- Axis: Y ---------" );
           showRelativePosition(myStr, steps);
           break;
         case 'Z':
           stepNo = myStr.toInt();
-          steps = moveAbsoulteNumberSteps(stepNo, stepDelay, secondStepDelay, stepPinZ, dirPinZ);
-          absPositionz = absPositionz + steps;
+          moveAbsoulteNumberSteps(stepNo, stepDelay, secondStepDelay, stepPinZ, dirPinZ);
+          absPositionz = absPositionz + stepNo;
           Serial.println("--------- Axis: Z ---------" );
           showRelativePosition(myStr, steps);
           break;
@@ -137,24 +137,24 @@ void loop() {
         case 'X':
           positionToMove = myStr.toInt();
           stepNo = positionToMove - absPositionx;
-          steps = moveAbsoulteNumberSteps(stepNo, stepDelay, secondStepDelay, stepPinX, dirPinX);
-          absPositionx = absPositionx + steps;
+          moveAbsoulteNumberSteps(stepNo, stepDelay, secondStepDelay, stepPinX, dirPinX);
+          absPositionx = positionToMove;
           Serial.println("--------- Axis: X  ---------" );
           showAbsolutePosition(myStr, steps, absPositionx);
           break;
         case 'Y': 
           positionToMove=myStr.toInt();
           stepNo = positionToMove - absPositiony;
-          steps=moveAbsoulteNumberSteps(stepNo, stepDelay, secondStepDelay, stepPinY, dirPinY);
-          absPositiony = absPositiony + steps;
+          moveAbsoulteNumberSteps(stepNo, stepDelay, secondStepDelay, stepPinY, dirPinY);
+          absPositiony = positionToMove;
           Serial.println("--------- Axis: Y  ---------" );
           showAbsolutePosition(myStr, steps, absPositiony);
           break;
         case 'Z':
           positionToMove=myStr.toInt();
           stepNo = positionToMove - absPositionz;
-          steps=moveAbsoulteNumberSteps(stepNo, stepDelay, secondStepDelay, stepPinZ, dirPinZ);
-          absPositionz = absPositionz + steps;
+          moveAbsoulteNumberSteps(stepNo, stepDelay, secondStepDelay, stepPinZ, dirPinZ);
+          absPositionz = positionToMove;
           Serial.println("--------- Axis: Z  ---------" );
           showAbsolutePosition(myStr, steps, absPositionz);
           break;
@@ -167,7 +167,6 @@ void loop() {
       Serial.write("new frequency: ");
       Serial.println(myStr);
       currentFrequency = myStr.toInt();
-      
       stepDelay = 200000 / currentFrequency;
       secondStepDelay = 800000 / currentFrequency;
       Serial.write("step delay: ");
@@ -249,13 +248,10 @@ int getSpeed(int currentStep, int totalStep){
 }
 
 int moveAbsoulteNumberSteps(int stepsNumberToDo, int stepDelay, int secondStepDelay, int stepPin, int directionPin){
-  int motorDirection;
   if (stepsNumberToDo > 0) {
     digitalWrite(directionPin, LOW); // clockwise direction
-    motorDirection = -1;
   } else {
     digitalWrite(directionPin,HIGH); // anticlockwise direction
-    motorDirection = 1;
   }
   for(int x = 0; x < abs(stepsNumberToDo); x++) {
     int currentStepDelay = getSpeed(x, abs(stepsNumberToDo)) / 2;
@@ -264,6 +260,4 @@ int moveAbsoulteNumberSteps(int stepsNumberToDo, int stepDelay, int secondStepDe
     digitalWrite(stepPin,LOW); 
     delayMicroseconds(currentStepDelay); 
   }
-  int stepCounter = abs(stepsNumberToDo) * motorDirection;
-  return stepCounter;
 }
