@@ -94,7 +94,8 @@ class ArrowControl(Frame):
         self.stepLabel.grid(row = 3, column = 0, pady = 20)
 
         self.steps.trace("w", lambda name, index, mode, sv=self.steps: self.updateStepCallback(sv))
-        self.stepEntry = Entry(self.parent, width=8,  textvariable = self.steps)
+        vcmd = (self.register(self.validationOnlyNumbers))
+        self.stepEntry = Entry(self.parent, validate='all', width=8,  textvariable = self.steps, validatecommand=(vcmd, '%P'))
         self.stepEntry.insert ( END, self.totalSteps )
         self.stepEntry.grid(row = 3, column = 1, pady = 20)
 
@@ -104,6 +105,12 @@ class ArrowControl(Frame):
     def updateStepCallback(self, sev):
         if not self.steps.get()=='':
             self.totalSteps = int(self.steps.get())
+
+    def validationOnlyNumbers(self, P):
+        if str.isdigit(P) or P == "":
+            return True
+        else:
+            return False
         
 class GUI(Frame):
     def __init__(self, parent, *args, **kwargs):
