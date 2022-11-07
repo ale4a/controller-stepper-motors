@@ -56,12 +56,15 @@ class ArrowControl(Frame):
         self.relativeMovement("Z",-self.totalSteps)
     
     def setPosition(self):
+        timeWaitX, timeWaitY, timeWaitZ = self.arduino.getAbsoulutePosition()
+        print(timeWaitX, timeWaitY, timeWaitZ)
+        # TODO: review the times
         self.absoluteMovement("X", 0)
-        time.sleep(1)
+        time.sleep(3)
         self.absoluteMovement("Y", 0)
-        time.sleep(1)
+        time.sleep(3)
         self.absoluteMovement("Z", 0)
-        time.sleep(1)
+        time.sleep(3)
     
     def createWidgets(self):
         padding = {"padx": 10, "pady": 10}

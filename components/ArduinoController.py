@@ -10,6 +10,9 @@ class ArduinoController():
         self.statusDisplay  = statusDisplay
         self.messages = Messages.Messages()
 
+    def getAbsoulutePosition(self):
+        return self.absPosition
+        
     # movimient type; axis; steps
     def verifyString(self, stringToVerify):
         optionsInputRead = stringToVerify.split(";")
