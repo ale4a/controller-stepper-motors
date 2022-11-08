@@ -17,10 +17,10 @@ class CoordinateState(Frame):
 
     def createWidgets(self):
         fontState  = "Helvetica 10 bold italic"
-        padding = {"pady": 5, "padx":15}
+        padding = {"pady": 5, "padx":10}
         stylesLabel = {
             "bg": "white", 
-            "width": 15
+            "width": 10
         }
         messuare = "steps"
         # - - - - - - - - - - - - - - - - - - - - -
