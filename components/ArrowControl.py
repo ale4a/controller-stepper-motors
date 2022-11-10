@@ -11,6 +11,8 @@ class ArrowControl(Frame):
         super().__init__()
         self.parent = parent
         self.arduino = arduino
+        self.moving = False
+        self.move_delay = 50
         self.steps =  StringVar()
         self.messages = Messages.Messages()
         self.totalSteps = 100
@@ -36,6 +38,18 @@ class ArrowControl(Frame):
         except Exception as e:
             print(e)
             self.messages.popupShowinfo("Error", "Problems with connection with arduino")
+
+    def move(self):
+        if self.moving:
+            self.relativeMovement("Y",10)
+        # Here again the self.after() method has to be called
+        self.after(self.move_delay, self.move)
+        
+    def on_press(self, event):
+        self.moving = True
+
+    def on_release(self, event):
+        self.moving = False
 
     def yPositive(self):
         self.relativeMovement("Y",self.totalSteps)
@@ -75,8 +89,13 @@ class ArrowControl(Frame):
             "fg": "white",
             "font": font.Font(size=13)
         }
-        self.upButton = Button(self.parent, text="+Y", command=self.yPositive, **stylesOptions)
-        self.upButton.grid(row = 0, column = 1, **padding)
+        self.after(self.move_delay, self.move)
+
+        self.yAxisPositive = Button(self.parent, text="+Y", command=self.yPositive, **stylesOptions)
+        self.yAxisPositive.grid(row = 0, column = 1, **padding)
+
+        self.yAxisPositive.bind("<ButtonPress>", self.on_press)
+        self.yAxisPositive.bind("<ButtonRelease>", self.on_release)
 
         self.downButton = Button(self.parent, text="-Y", command=self.yNegative, **stylesOptions)
         self.downButton.grid(row = 1, column = 1, **padding)
