@@ -68,6 +68,7 @@ class ArduinoController():
             elif axisMovement == "Y":
                 self.absPosition[1] = self.absPosition[1] + int(stepsMovement)
                 self.arduino.movePosition("Y", int(stepsMovement))
+                print("-------")
             elif axisMovement == "Z":
                 self.absPosition[2] = self.absPosition[2] + int(stepsMovement)
                 self.arduino.movePosition("Z", int(stepsMovement))

@@ -23,7 +23,6 @@ class CommandsConsole(Frame):
             self.commandToSend = self.inputCommand.get()
             self.textCommand.config(state=NORMAL)
             self.textCommand.insert(END, "> "+self.commandToSend + '\n')
-            self.arduino.readOptions(self.commandToSend)
             stateAnswer = self.arduino.readOptions(self.commandToSend)
             if(stateAnswer != True):
                 self.textCommand.insert(END, "Invalid input.\n")

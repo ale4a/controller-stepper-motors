@@ -59,14 +59,13 @@ class Arduino():
             self.board.digital[stepPin].write(1)
             timing.delayMicroseconds(currentStepDelay)
             self.board.digital[stepPin].write(0)
-            print(currentStepDelay)
 
     def movePosition(self, axis, steps):
         if(axis == "X"):
             self.moveNumberSteps(steps, self.stepPinX, self.dirPinX)
         if(axis == "Y"):
             self.moveNumberSteps(steps, self.stepPinY, self.dirPinY)
-        if(axis == "Y"):
+        if(axis == "Z"):
             self.moveNumberSteps(steps, self.stepPinZ, self.dirPinZ)
     
     def isOpen(self):
