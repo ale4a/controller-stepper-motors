@@ -1,4 +1,5 @@
 import components.Messages as Messages
+import components.Arduino as Arduino
 import serial
 import time
 
@@ -33,7 +34,8 @@ class ArduinoController():
 
     def connectArduino(self, port, baudrate):
         try:
-            self.arduino = serial.Serial(port, baudrate, timeout=.1)
+            # self.arduino = serial.Serial(port, baudrate, timeout=.1)
+            self.arduino = Arduino.Arduino(port)
         except:
             self.messages.popupShowinfo("Error", "It is not possible to connect")
             print("it is not possible to connect")
@@ -54,31 +56,38 @@ class ArduinoController():
         if not self.verifyString(valueInput):
             return False
         axisMovement, typeMovement, stepsMovement = self.getMotorMovement(valueInput)
-        command =  typeMovement + axisMovement + stepsMovement + "\n"
         if not self.verifyTypeMovement(typeMovement):
             return False
         if not self.verifyAxisMovement(axisMovement):
             return False
         if typeMovement =="R":
             time.sleep(0.1)
-            self.arduino.write(bytes(command, 'utf-8'))
             if axisMovement == "X":
                 self.absPosition[0] = self.absPosition[0] + int(stepsMovement)
+                self.arduino.movePosition("X", int(stepsMovement))
             elif axisMovement == "Y":
                 self.absPosition[1] = self.absPosition[1] + int(stepsMovement)
+                self.arduino.movePosition("Y", int(stepsMovement))
             elif axisMovement == "Z":
                 self.absPosition[2] = self.absPosition[2] + int(stepsMovement)
+                self.arduino.movePosition("Z", int(stepsMovement))
             self.statusDisplay.updateAxis()
             return True
         elif typeMovement =="A":
             time.sleep(0.1)
-            self.arduino.write(bytes(command, 'utf-8'))
             if axisMovement == "X":
+                steNo = int(stepsMovement) - self.absPosition[0]
+                self.arduino.movePosition("X", steNo)
                 self.absPosition[0] = int(stepsMovement)
             elif axisMovement == "Y":
+                steNo = int(stepsMovement) - self.absPosition[1]
+                self.arduino.movePosition("Y", steNo)
                 self.absPosition[1] = int(stepsMovement)
             elif axisMovement == "Z":
+                steNo = int(stepsMovement) - self.absPosition[2]
+                self.arduino.movePosition("Z", steNo)
                 self.absPosition[2] = int(stepsMovement)
+
             self.statusDisplay.updateAxis()
             return True
 
