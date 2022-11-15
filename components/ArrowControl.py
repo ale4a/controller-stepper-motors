@@ -67,7 +67,9 @@ class ArrowControl(Frame):
     def zNegative(self):
         self.relativeMovement("Z",-self.totalStepsAxisZ)
     
-    
+    def sendCommand(self):
+        self.arduino.setZeroPosition()
+        
     def createWidgets(self):
         fontState  = "Helvetica 10 bold italic"
         padding = {
@@ -86,9 +88,12 @@ class ArrowControl(Frame):
             "validate": 'all'
         }
 
+        self.sendButton = Button(self.parent, text= "Set position",command = self.sendCommand, width=15)
+        self.sendButton.grid(row = 0, column = 0, columnspan=3)
+
         self.measuramentComoboboxValue = StringVar()
-        rateComobobox = Combobox(self.parent, height=4, width = 8, textvariable=self.measuramentComoboboxValue, justify=CENTER)
-        rateComobobox.grid(row = 0, column = 0, columnspan=2)
+        rateComobobox = Combobox(self.parent, height=4, width = 5, textvariable=self.measuramentComoboboxValue, justify=CENTER)
+        rateComobobox.grid(row = 0, column = 3, columnspan=2)
         rateComobobox['values'] = self.measurements
         rateComobobox.current(0)
 

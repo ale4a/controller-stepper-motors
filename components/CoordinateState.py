@@ -11,29 +11,32 @@ class CoordinateState(Frame):
         self.absPosition = absPosition
         self.createWidgets()
 
+    def transformMM(self, steps):
+        return steps
+
+    def getValueStepsString(self, steps):
+        mm = self.transformMM(steps)
+        return "{} steps / {} mm".format(steps,mm)
+
     def updateAxis(self):
-        self.axisXValue.config(text = str(self.absPosition[0]))
-        self.axisYValue.config(text = str(self.absPosition[1]))
-        self.axisZValue.config(text = str(self.absPosition[2]))
+        self.axisXValue.config(text = self.getValueStepsString(str(self.absPosition[0])))
+        self.axisYValue.config(text = self.getValueStepsString(str(self.absPosition[1])))
+        self.axisZValue.config(text = self.getValueStepsString(str(self.absPosition[2])))
 
     def createWidgets(self):
         fontState  = "Helvetica 10 bold italic"
-        padding = {"pady": 2, "padx":10}
+        padding = {"pady": 2, "padx":5}
         stylesLabel = {
-            "bg": "white", 
-            "width": 10
+            # "bg": "white", 
+            "width": 18
         }
-        messuare = "steps"
         # - - - - - - - - - - - - - - - - - - - - -
         # Axis X
         self.axisXLabel = Label(self.parent, text="X:", font=fontState)
         self.axisXLabel.grid(row = 0, column = 0, **padding)
 
-        self.axisXValue = Label(self.parent, text = str(self.absPosition[0]), font=fontState, **stylesLabel)
+        self.axisXValue = Label(self.parent, text = self.getValueStepsString(str(self.absPosition[0])), font=fontState, **stylesLabel)
         self.axisXValue.grid(row = 0, column = 1, **padding)
-
-        self.axisXMessuare = Label(self.parent, text = messuare, font=fontState)
-        self.axisXMessuare.grid(row = 0, column = 2, **padding)
 
         # - - - - - - - - - - - - - - - - - - - - -
         # Axis Y
@@ -41,11 +44,8 @@ class CoordinateState(Frame):
         self.axisYLabel = Label(self.parent, text="Y:", font=fontState)
         self.axisYLabel.grid(row = 1, column = 0,  **padding)
 
-        self.axisYValue = Label(self.parent, text = str(self.absPosition[1]), font=fontState, **stylesLabel)
+        self.axisYValue = Label(self.parent, text = self.getValueStepsString(str(self.absPosition[1])), font=fontState, **stylesLabel)
         self.axisYValue.grid(row = 1, column = 1, **padding)
-
-        self.axisYMessuare = Label(self.parent, text = messuare, font=fontState)
-        self.axisYMessuare.grid(row = 1, column = 2, **padding)
 
         # - - - - - - - - - - - - - - - - - - - - -
         # Axis Z
@@ -53,11 +53,8 @@ class CoordinateState(Frame):
         self.axisZLabel = Label(self.parent, text="Z:", font=fontState)
         self.axisZLabel.grid(row = 2, column = 0, **padding)
 
-        self.axisZValue = Label(self.parent, text = str(self.absPosition[2]), font=fontState, **stylesLabel)
+        self.axisZValue = Label(self.parent, text = self.getValueStepsString(str(self.absPosition[2])), font=fontState, **stylesLabel)
         self.axisZValue.grid(row = 2, column = 1, **padding)
-
-        self.axisZMessuare = Label(self.parent, text = messuare, font=fontState)
-        self.axisZMessuare.grid(row = 2, column = 2, **padding)
 
         # - - - - - - - - - - - - - - - - - - - - -
 
