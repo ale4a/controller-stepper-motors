@@ -62,6 +62,7 @@ class ArduinoController():
             return False
         if not self.verifyAxisMovement(axisMovement):
             return False
+        # TODO: add verification fot stepsMovement only accept numbers
         if typeMovement =="R":
             time.sleep(0.1)
             if axisMovement == "X":
