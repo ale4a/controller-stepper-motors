@@ -1,7 +1,7 @@
 # Use Tkinter for python 2, tkinter for python 3
 from tkinter import E, Tk, LEFT
 from tkinter import Tk, Label, StringVar, W
-from tkinter import Frame, Button
+from tkinter import Frame, Button, PhotoImage
 from tkinter.ttk import Combobox
 import sys
 import glob
@@ -12,8 +12,11 @@ class ConnectionPort(Frame):
         super().__init__()
         self.parent = parent
         self.arduino = arduino
+        self.RATE = 9600
+        self.isConnected = False
+        self.onImage = PhotoImage(file = "img/on.png")
+        self.offImage = PhotoImage(file = "img/off.png")
         self.portsComboboxValue = StringVar()
-        self.rateComoboboxValue = StringVar()
         self.createWidgets()
 
     def createWidgets(self):
@@ -41,70 +44,47 @@ class ConnectionPort(Frame):
         self.schaltf1.grid(row = 0, column = 1, padx=10)
 
     def selectPort(self):
-        self.rate = ['9600']
+        padding = {"padx": 5, "pady": 10}
         self.portNameLabel = Label(self.parent, text = "Port name: ")
-        self.portNameLabel.grid(row = 0, column = 0, sticky = W)
+        self.portNameLabel.grid(row = 0, column = 0, sticky = W, **padding)
 
         try:
             self.portsComboboxValue = StringVar()
             portsCombobox = Combobox(self.parent, height=4, textvariable=self.portsComboboxValue)
-            portsCombobox.grid(row=0, column=1)
+            portsCombobox.grid(row=0, column=1, **padding)
             portsCombobox['values'] = self.ports
             portsCombobox.bind("<<ComboboxSelected>>", self.onSelectPortName)
         except TypeError:
             print("Something is wrong with select port")
 
-        self.outputPortNameLabel = Label(self.parent, foreground='red')
-        self.outputPortNameLabel.grid(row = 1, column = 1, sticky = W)
+        self.switchConnection = Button(self.parent, image = self.offImage, bd = 0, command = self.switchConnectionFuntion)
+        self.switchConnection.grid(row = 0, column = 3, **padding)
 
-        self.bauteRateLabel = Label(self.parent, text="Baound Rate: ")
-        self.bauteRateLabel.grid(row = 2, column = 0, sticky = W)
-        
-        try:
-            self.rateComoboboxValue = StringVar()
-            rateComobobox = Combobox(self.parent, height=4, textvariable=self.rateComoboboxValue)
-            rateComobobox.grid(row = 2, column = 1)
-            rateComobobox['values'] = self.rate
-            rateComobobox.bind("<<ComboboxSelected>>", self.onSelectRate)
-        except TypeError:
-            print("Something is wrong with select rate")
-
-        self.outputBauteRateLabel = Label(self.parent, foreground='red')
-        self.outputBauteRateLabel.grid(row = 3, column = 1, sticky = W)
-
-        self.buttonConnection = Button(self.parent, text="Connect", command=self.connectArduino)
-        self.buttonConnection.grid(row = 0, column = 2, padx=5)
-
-        self.buttonConnection = Button(self.parent, text="Disconnect", command=self.disconnectArduino)
-        self.buttonConnection.grid(row = 0, column = 3, padx=5)
-
-        self.outputConnectedLabel = Label(self.parent, foreground='green')
-        self.outputConnectedLabel.grid(row = 2, column = 2, columnspan=2, rowspan=1)
-
+    def switchConnectionFuntion(self):
+        if self.isConnected:
+            self.disconnectArduino()
+        else:
+            self.connectArduino()
+            
     def disconnectArduino(self):
         try:
-            self.outputConnectedLabel['text'] = f'You are disconnected!!'
-            self.outputConnectedLabel['foreground'] = 'red'
             self.arduino.closeConnection()
+            self.isConnected = False
+            self.switchConnection.config(image = self.offImage)
         except:
             print("some is wrong when disconnect arduino")
 
     def connectArduino(self):
         try:
             self.arduino.connectArduino(self.PORT, self.RATE)
-            self.outputConnectedLabel['text'] = f'You are connected!!'
-            self.outputConnectedLabel['foreground'] = 'green'
+            self.isConnected = True
+            self.switchConnection.config(image = self.onImage)
         except:
             print("some is wrong when connect arduino")
 
     def onSelectPortName(self, event):
         self.PORT= event.widget.get()
-        self.outputPortNameLabel['text'] = f'You selected: {event.widget.get()}'
         
-    def onSelectRate(self, event):
-        self.RATE = event.widget.get()
-        self.outputBauteRateLabel['text'] = f'You selected: {event.widget.get()}'
-
     def connectPorts(self):
         """ Lists serial port names
             :raises EnvironmentError:

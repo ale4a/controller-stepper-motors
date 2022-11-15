@@ -56,10 +56,10 @@ class CommandsConsole(Frame):
         self.inputCommand.grid(row = 0, column = 1)
         self.inputCommand.bind("<Return>", self.sendCommandWithEnter)
 
-        self.sendButton = Button(self.parent, text= "Send", command = self.sendCommand, width=10)
+        self.sendButton = Button(self.parent, text= "Send", command = self.sendCommand, width=8)
         self.sendButton.grid(row = 0, column = 2, sticky=W)
 
-        self.cleanButton = Button(self.parent, text= "Clean", command = self.cleanText, width=10)
+        self.cleanButton = Button(self.parent, text= "Clean", command = self.cleanText, width=8)
         self.cleanButton.grid(row = 0, column = 3, sticky=W)
 
         self.textCommand = scrolledtext.ScrolledText(self.parent, state=DISABLED, width=45, height=10)

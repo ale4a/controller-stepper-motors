@@ -11,6 +11,12 @@ class ArduinoController():
         self.statusDisplay  = statusDisplay
         self.messages = Messages.Messages()
 
+    def setZeroPosition(self):
+        self.absPosition[0] = 0
+        self.absPosition[1] = 0
+        self.absPosition[2] = 0
+        self.statusDisplay.updateAxis()
+
     def getAbsoulutePosition(self):
         return self.absPosition
         
@@ -42,11 +48,7 @@ class ArduinoController():
 
     def closeConnection(self):
         try:
-            if self.arduino.isOpen() == True:
-                self.arduino.close()
-            else:
-                self.messages.popupShowinfo("Error", "It is not open")
-                print("it is not open")
+            self.arduino.isClose()
         except:
             self.messages.popupShowinfo("Error", "Do not exist variable arduino declared")
             print("Do not exist variable arduino declared")
@@ -68,7 +70,6 @@ class ArduinoController():
             elif axisMovement == "Y":
                 self.absPosition[1] = self.absPosition[1] + int(stepsMovement)
                 self.arduino.movePosition("Y", int(stepsMovement))
-                print("-------")
             elif axisMovement == "Z":
                 self.absPosition[2] = self.absPosition[2] + int(stepsMovement)
                 self.arduino.movePosition("Z", int(stepsMovement))

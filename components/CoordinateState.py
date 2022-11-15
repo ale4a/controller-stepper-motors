@@ -3,6 +3,7 @@ from tkinter import Tk, LEFT
 from tkinter import Tk, Label
 from tkinter import Frame
 
+
 class CoordinateState(Frame):
     def __init__(self, parent, absPosition):
         super().__init__()
@@ -17,7 +18,7 @@ class CoordinateState(Frame):
 
     def createWidgets(self):
         fontState  = "Helvetica 10 bold italic"
-        padding = {"pady": 5, "padx":10}
+        padding = {"pady": 2, "padx":10}
         stylesLabel = {
             "bg": "white", 
             "width": 10
@@ -58,6 +59,7 @@ class CoordinateState(Frame):
         self.axisZMessuare = Label(self.parent, text = messuare, font=fontState)
         self.axisZMessuare.grid(row = 2, column = 2, **padding)
 
+        # - - - - - - - - - - - - - - - - - - - - -
 
 class GUI(Frame):
     def __init__(self, parent, *args, **kwargs):

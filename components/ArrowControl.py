@@ -4,6 +4,7 @@ from tkinter import Tk, Label
 from tkinter import Frame, Button, Entry, StringVar
 import components.Messages as Messages
 import tkinter.font as font
+from tkinter.ttk import Combobox
 import time
 
 class ArrowControl(Frame):
@@ -15,6 +16,10 @@ class ArrowControl(Frame):
         self.move_delay = 50
         self.steps =  StringVar()
         self.messages = Messages.Messages()
+        self.measurements = [
+            "steps",
+            "mm"
+        ]
         self.totalSteps = 100
         self.createWidgets()
 
@@ -57,65 +62,66 @@ class ArrowControl(Frame):
     def zNegative(self):
         self.relativeMovement("Z",-self.totalSteps)
     
-    def setPosition(self):
-        timeWaitX, timeWaitY, timeWaitZ = self.arduino.getAbsoulutePosition()
-        print(timeWaitX, timeWaitY, timeWaitZ)
-        # TODO: review the times
-        self.absoluteMovement("X", 0)
-        time.sleep(3)
-        self.absoluteMovement("Y", 0)
-        time.sleep(3)
-        self.absoluteMovement("Z", 0)
-        time.sleep(3)
     
     def createWidgets(self):
-        padding = {"padx": 10, "pady": 10}
+        fontState  = "Helvetica 10 bold italic"
+        padding = {"padx": 5, "pady": 8}
         stylesOptions = {
-            "width": 5,
-            "height": 2,
+            "width": 3,
             "bg": "#253D5B",
             "fg": "white",
-            "font": font.Font(size=13)
+            "font": font.Font(size=15)
         }
-        self.yAxisPositive = Button(self.parent, text="+Y", command=self.yPositive, **stylesOptions)
-        self.yAxisPositive.grid(row = 0, column = 1, **padding)
 
-        self.downButton = Button(self.parent, text="-Y", command=self.yNegative, **stylesOptions)
-        self.downButton.grid(row = 1, column = 1, **padding)
-
-        self.rightButton = Button(self.parent, text="-X", command=self.xNegative, **stylesOptions)
-        self.rightButton.grid(row = 1, column = 0, **padding)
-
-        self.leftButton = Button(self.parent, text="+X", command=self.xPositive, **stylesOptions)
-        self.leftButton.grid(row = 1, column = 2, **padding)
-
-        self.leftButton = Button(self.parent, text="+Z", command=self.zPositive, **stylesOptions)
-        self.leftButton.grid(row = 0, column = 4, **padding)
-
-        self.leftButton = Button(self.parent, text="-Z", command=self.zNegative, **stylesOptions)
-        self.leftButton.grid(row = 1, column = 4, **padding)
-
-        self.stepLabel = Label(self.parent, text = "Steps")
-        self.stepLabel.grid(row = 3, column = 0, pady = 20)
+        
+        self.measuramentComoboboxValue = StringVar()
+        rateComobobox = Combobox(self.parent, height=4, width=5,textvariable=self.measuramentComoboboxValue)
+        rateComobobox.grid(row = 1, column = 0, padx=2)
+        rateComobobox['values'] = self.measurements
+        rateComobobox.current(0)
 
         self.steps.trace("w", lambda name, index, mode, sv=self.steps: self.updateStepCallback(sv))
         vcmd = (self.register(self.validationOnlyNumbers))
         self.stepEntry = Entry(self.parent, validate='all', width=8,  textvariable = self.steps, validatecommand=(vcmd, '%P'))
         self.stepEntry.insert ( END, self.totalSteps )
-        self.stepEntry.grid(row = 3, column = 1, pady = 20)
+        self.stepEntry.grid(row = 1, column = 1, padx=2)
 
-        self.leftButton = Button(self.parent, text="Reset position [0, 0, 0]", command=self.setPosition)
-        self.leftButton.grid(row = 3, column = 2, **padding, columnspan=3)
+
+        self.axisXValue = Label(self.parent, text = "X", font=fontState)
+        self.axisXValue.grid(row = 0, column = 2)
+
+        self.rightButton = Button(self.parent, text="-", command=self.xNegative, **stylesOptions)
+        self.rightButton.grid(row = 0, column = 3, **padding)
+
+        self.leftButton = Button(self.parent, text="+", command=self.xPositive, **stylesOptions)
+        self.leftButton.grid(row = 0, column = 4, **padding)
+
+        self.axisXValue = Label(self.parent, text = "Y", font=fontState)
+        self.axisXValue.grid(row = 1, column = 2)
+
+        self.downButton = Button(self.parent, text="-", command=self.yNegative, **stylesOptions)
+        self.downButton.grid(row = 1, column = 3, **padding)
+        
+        self.yAxisPositive = Button(self.parent, text="+", command=self.yPositive, **stylesOptions)
+        self.yAxisPositive.grid(row = 1, column = 4, **padding)
+
+        self.axisXValue = Label(self.parent, text = "Z", font=fontState)
+        self.axisXValue.grid(row = 2, column = 2)
+
+        self.leftButton = Button(self.parent, text="-", command=self.zNegative, **stylesOptions)
+        self.leftButton.grid(row = 2, column = 3, **padding)
+
+
+        self.leftButton = Button(self.parent, text="+", command=self.zPositive, **stylesOptions)
+        self.leftButton.grid(row = 2, column = 4, **padding)
+
 
     def updateStepCallback(self, sev):
         if not self.steps.get()=='':
             self.totalSteps = int(self.steps.get())
 
     def validationOnlyNumbers(self, P):
-        if str.isdigit(P) or P == "":
-            return True
-        else:
-            return False
+        return str.isdigit(P) or P == ""
         
 class GUI(Frame):
     def __init__(self, parent, *args, **kwargs):

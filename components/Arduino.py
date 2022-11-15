@@ -10,7 +10,9 @@ import components.timing as timing
 MIN_STEP = 0
 MAX_STEP = 0
 # this means that 35% started fast and 40% MAX_SPEED and 35% finish slow
-porcentageToPerfom = 30
+
+# TODO: REVIEW THE % AND CHANGE FOR ABSOULUTE FOR A BIG NUMBERS
+porcentageToPerfom = 35
 MIN_SPEED = 4000
 MAX_SPEED = 1000
 
@@ -54,7 +56,7 @@ class Arduino():
         else:
             self.board.digital[directionPin].write(1)
 
-        for x in range(abs(stepsNumberToDo) + 1):
+        for x in range(abs(stepsNumberToDo)):
             currentStepDelay = self.getSpeed(x, abs(stepsNumberToDo))
             self.board.digital[stepPin].write(1)
             timing.delayMicroseconds(currentStepDelay)
@@ -68,11 +70,8 @@ class Arduino():
         if(axis == "Z"):
             self.moveNumberSteps(steps, self.stepPinZ, self.dirPinZ)
     
-    def isOpen(self):
-        return True
-    
     def isClose(self):
-        return False
+        self.board.exit()
 
 if __name__ == '__main__':
     arduino = Arduino("COM4")
