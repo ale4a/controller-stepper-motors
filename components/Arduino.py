@@ -70,6 +70,27 @@ class Arduino():
         if(axis == "Z"):
             self.moveNumberSteps(steps, self.stepPinZ, self.dirPinZ)
     
+    def getAxis(self, axis):
+        if(axis == "X"):
+            return (self.dirPinX, self.stepPinX)
+        if(axis == "Y"):
+            return (self.dirPinY, self.stepPinY)
+        if(axis == "Z"):
+            return (self.dirPinZ, self.stepPinZ)
+
+    def constansMove(self, axis, direction):
+        directionPin, stepPin = self.getAxis(axis)
+        if (direction > 0):
+            self.board.digital[directionPin].write(0)
+        else:
+            self.board.digital[directionPin].write(1)
+
+        currentStepDelay = 1400
+        for x in range(abs(4)):
+            self.board.digital[stepPin].write(1)
+            timing.delayMicroseconds(currentStepDelay)
+            self.board.digital[stepPin].write(0)
+
     def isClose(self):
         self.board.exit()
 

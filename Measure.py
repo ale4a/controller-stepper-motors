@@ -16,11 +16,8 @@ class Measure():
         self.moving = False
         self.move_delay = 50
         
-        width = 400
-        height = 400
-        self.parent.geometry('%dx%d+%d+%d' % (width, height, 1000, 500))
         self.parent.after(self.move_delay, self.movePositiveX)
-        self.parent.after(self.move_delay, self.moveNegativeX)
+        # self.parent.after(self.move_delay, self.moveNegativeX)
         self.create_widgets()
 
     def movePositiveX(self): 
@@ -45,15 +42,15 @@ class Measure():
         self.axisXValue.grid(row = 0, column = 0, **padding)
         self.switchAxisPositiveX = Button(self.parent, text="+")
         self.switchAxisPositiveX.after(self.move_delay, self.movePositiveX)
-        self.switchAxisPositiveX.grid(row = 0, column = 1, **padding)
+        self.switchAxisPositiveX.grid(row = 0, column = 1)
         self.switchAxisPositiveX.bind("<ButtonPress>", self.on_press)
         self.switchAxisPositiveX.bind("<ButtonRelease>", self.on_release)
-
-        self.switchAxisNegativeX = Button(self.parent, text="-")
-        self.switchAxisNegativeX.after(self.move_delay, self.moveNegativeX)
-        self.switchAxisNegativeX.grid(row = 0, column = 2, **padding)
-        self.switchAxisNegativeX.bind("<ButtonPress>", self.on_press)
-        self.switchAxisNegativeX.bind("<ButtonRelease>", self.on_release)
+        # TODO: review why only accept 1 bind
+        # self.switchAxisNegativeX = Button(self.parent, text="-")
+        # self.switchAxisNegativeX.after(self.move_delay, self.moveNegativeX)
+        # self.switchAxisNegativeX.grid(row = 0, column = 2)
+        # self.switchAxisNegativeX.bind("<ButtonPress>", self.on_press2)
+        # self.switchAxisNegativeX.bind("<ButtonRelease>", self.on_release2)
         
         # ---------------------------------------------- Y
         self.axisXValue = Label(self.parent, text = "Y:", font=fontState)
@@ -67,6 +64,13 @@ class Measure():
 
     def on_release(self, event):
         self.moving = False
+
+    def on_press2(self, event):
+        self.moving = True
+
+    def on_release2(self, event):
+        self.moving = False
+
 
     def switchConnectionFuntionX(self):
         if self.isConnectedX:

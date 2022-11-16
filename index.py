@@ -1,10 +1,12 @@
 import tkinter as tk
 from tkinter import ttk
+
 import components.ConnectionPort as ConnectionPort
 import components.CommandsConsole as CommandsConsole
 import components.ArduinoController as ArduinoController
 import components.ArrowControl as ArrowControl
 import components.CoordinateState as CoordinateState
+import Measure as Measure
 
 class ControllerMottors():
     def __init__(self):
@@ -15,6 +17,7 @@ class ControllerMottors():
         self.statusDisplay = CoordinateState.CoordinateState(self.absolutePosicionFrame, self.absPosition)
         self.arduino = ArduinoController.ArduinoController(self.absPosition, self.statusDisplay)
         self.create_widgets()
+        self.measure = Measure.Measure(self.window, self.arduino)
 
     def create_widgets(self):
         # Create some room around all the internal frames
@@ -45,6 +48,7 @@ class ControllerMottors():
 
 if __name__ == "__main__":
     program = ControllerMottors()
+    program.window.resizable(False, False)
     program.window.mainloop()
     #  template
     # https://runestone.academy/ns/books/published/thinkcspy/GUIandEventDrivenProgramming/03_widgets.html

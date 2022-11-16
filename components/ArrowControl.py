@@ -5,7 +5,6 @@ from tkinter import Frame, Button, Entry, StringVar
 import components.Messages as Messages
 import tkinter.font as font
 from tkinter.ttk import Combobox
-import time
 
 class ArrowControl(Frame):
     def __init__(self, parent, arduino):
@@ -93,7 +92,7 @@ class ArrowControl(Frame):
 
         self.measuramentComoboboxValue = StringVar()
         rateComobobox = Combobox(self.parent, height=4, width = 5, textvariable=self.measuramentComoboboxValue, justify=CENTER)
-        rateComobobox.grid(row = 0, column = 3, columnspan=2)
+        rateComobobox.grid(row = 0, column = 3)
         rateComobobox['values'] = self.measurements
         rateComobobox.current(0)
 

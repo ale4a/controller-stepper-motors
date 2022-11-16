@@ -1,6 +1,5 @@
 import components.Messages as Messages
 import components.Arduino as Arduino
-import serial
 import time
 
 class ArduinoController():
@@ -93,6 +92,10 @@ class ArduinoController():
 
             self.statusDisplay.updateAxis()
             return True
+
+    def constansMoveController(self, axis, direction):
+        self.arduino.constansMove(axis, direction)
+
 
 if __name__ == '__main__':
     # Define the serial port and baud rate.
