@@ -13,7 +13,6 @@ class CoordinateState(Frame):
 
     def getValueStepsString(self, steps):
         mm = Convert.convertStepsToMM(int(steps))
-        print(mm)
         return "{} steps / {} mm".format(steps,mm)
 
     def updateAxis(self):
