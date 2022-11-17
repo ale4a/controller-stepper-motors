@@ -5,7 +5,7 @@ from tkinter import Frame, Button, Entry, StringVar
 import components.Messages as Messages
 import tkinter.font as font
 from tkinter.ttk import Combobox
-
+import utils.convert as Convert
 class ArrowControl(Frame):
     def __init__(self, parent, arduino):
         super().__init__()
@@ -28,6 +28,9 @@ class ArrowControl(Frame):
         self.createWidgets()
 
     def relativeMovement(self, axis, steps):
+        if(self.measuramentComoboboxValue.get() == "mm"):
+            steps = Convert.convertMMToSteps(int(steps))
+
         res = "R"+ ";" + axis + ";" + str(steps)
         try:
             stateAnswer = self.arduino.readOptions(res)
@@ -36,17 +39,6 @@ class ArrowControl(Frame):
                 self.messages.popupShowinfo("Error", "Invalid input")
         except Exception as e:
             self.messages.popupShowinfo("Error", e)
-
-    def absoluteMovement(self, axis, steps):
-        res = "A"+ ";" + axis + ";" + str(steps)
-        try:
-            stateAnswer = self.arduino.readOptions(res)
-            if(not stateAnswer):
-                self.textCommand.insert(END, "Invalid input.\n")
-                self.messages.popupShowinfo("Error", "Invalid input")
-        except Exception as e:
-            print(e)
-            self.messages.popupShowinfo("Error", "Problems with connection with arduino")
 
     def yPositive(self):
         self.relativeMovement("Y",self.totalStepsAxisY)

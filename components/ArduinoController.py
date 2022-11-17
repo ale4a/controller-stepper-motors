@@ -19,10 +19,9 @@ class ArduinoController():
     def getAbsoulutePosition(self):
         return self.absPosition
         
-    # movimient type; axis; steps
     def verifyString(self, stringToVerify):
         optionsInputRead = stringToVerify.split(";")
-        return len(optionsInputRead) == 3 
+        return len(optionsInputRead) == 3
 
     def verifyTypeMovement(self, movement):
         return movement == "R" or movement == "A"
@@ -39,7 +38,6 @@ class ArduinoController():
 
     def connectArduino(self, port, baudrate):
         try:
-            # self.arduino = serial.Serial(port, baudrate, timeout=.1)
             self.arduino = Arduino.Arduino(port)
         except:
             self.messages.popupShowinfo("Error", "It is not possible to connect")
@@ -95,6 +93,7 @@ class ArduinoController():
 
     def constansMoveController(self, axis, direction):
         self.arduino.constansMove(axis, direction)
+        self.statusDisplay.updateAxis()
 
 
 if __name__ == '__main__':

@@ -2,7 +2,7 @@
 from tkinter import Tk, LEFT
 from tkinter import Tk, Label
 from tkinter import Frame
-
+import utils.convert as Convert
 
 class CoordinateState(Frame):
     def __init__(self, parent, absPosition):
@@ -11,11 +11,9 @@ class CoordinateState(Frame):
         self.absPosition = absPosition
         self.createWidgets()
 
-    def transformMM(self, steps):
-        return steps
-
     def getValueStepsString(self, steps):
-        mm = self.transformMM(steps)
+        mm = Convert.convertStepsToMM(int(steps))
+        print(mm)
         return "{} steps / {} mm".format(steps,mm)
 
     def updateAxis(self):
