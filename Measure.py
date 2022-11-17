@@ -20,6 +20,7 @@ class Measure():
         self.movingNegativeAxisZ = False
         self.move_delay = 50
         
+        self.parent.geometry("400x400")
         self.create_widgets()
 
     def movePositiveAxisX(self):
