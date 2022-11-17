@@ -1,2 +1,2 @@
-# Stepper motor A4988 and Python
+# Controller stepper motors A4988 using python
 
