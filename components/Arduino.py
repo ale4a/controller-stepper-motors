@@ -9,10 +9,8 @@ import components.timing as timing
 
 MIN_STEP = 0
 MAX_STEP = 0
-# this means that 35% started fast and 40% MAX_SPEED and 35% finish slow
-
-# TODO: REVIEW THE % AND CHANGE FOR ABSOULUTE FOR A BIG NUMBERS
-porcentageToPerfom = 35
+# this means that 5% started fast and 90% MAX_SPEED and 5% finish slow
+porcentageToPerfom = 5
 MIN_SPEED = 4000
 MAX_SPEED = 1000
 
