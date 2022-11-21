@@ -1,12 +1,13 @@
 import tkinter as tk
 from tkinter import ttk
-
+from tkinter import Menu
 import components.ConnectionPort as ConnectionPort
 import components.CommandsConsole as CommandsConsole
 import components.ArduinoController as ArduinoController
 import components.ArrowControl as ArrowControl
 import components.CoordinateState as CoordinateState
 import Measure as Measure
+import components.Messages as Messages
 
 class ControllerMottors():
     def __init__(self):
@@ -16,8 +17,13 @@ class ControllerMottors():
         self.absolutePosicionFrame = ttk.LabelFrame(self.window, text="Absolute position", relief=tk.RIDGE)
         self.statusDisplay = CoordinateState.CoordinateState(self.absolutePosicionFrame, self.absPosition)
         self.arduino = ArduinoController.ArduinoController(self.absPosition, self.statusDisplay)
-        self.create_widgets()
+        self.messages = Messages.Messages()
         self.measure = Measure.Measure(self.window, self.arduino)
+        self.create_widgets()
+
+    def openSecondWindow(self):
+        if self.measure is not None:
+            self.measure = Measure.Measure(self.window, self.arduino)
 
     def create_widgets(self):
         # Create some room around all the internal frames
@@ -46,9 +52,22 @@ class ControllerMottors():
         ArrowControl.ArrowControl(arrowControlFrame, self.arduino)
         arrowControlFrame.grid(row=2, column=2, padx=6, sticky=tk.E + tk.W + tk.N + tk.S)
 
+        menu = Menu(self.window)
+        new_item = Menu(menu, tearoff=0)
+        new_item.add_command(label='New', command=self.openSecondWindow)
+        menu.add_cascade(label='File', menu=new_item)
+        self.window.config(menu=menu)
+
+    def callbackDestroyFirstProgram(self):
+        if self.messages.askQuestion("Warnimg","Do you want to clase the program?") == "yes":
+            program.window.destroy()
+
 if __name__ == "__main__":
     program = ControllerMottors()
     program.window.resizable(False, False)
+    program.window.protocol("WM_DELETE_WINDOW",  program.callbackDestroyFirstProgram)
+
+    
     program.window.mainloop()
-    #  template
+    
     # https://runestone.academy/ns/books/published/thinkcspy/GUIandEventDrivenProgramming/03_widgets.html
