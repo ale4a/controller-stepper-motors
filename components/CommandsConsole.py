@@ -4,7 +4,8 @@ from tkinter import Tk, Label, Entry
 from tkinter import Frame, Button
 from tkinter import scrolledtext
 import components.Messages as Messages
-
+import utils.convert as Convert
+from constants.constants import MILLIMITERS
 class CommandsConsole(Frame):
     def __init__(self, parent, arduino):
         super().__init__()
@@ -20,9 +21,9 @@ class CommandsConsole(Frame):
 
     def sendCommand(self):
         try:
-            self.commandToSend = self.inputCommand.get()
-            self.textCommand.config(state=NORMAL)
+            self.commandToSend = self.inputCommand.get() + ";" + MILLIMITERS
             self.textCommand.insert(END, "> "+self.commandToSend + '\n')
+            self.textCommand.config(state=NORMAL)
             stateAnswer = self.arduino.readOptions(self.commandToSend)
             if(stateAnswer != True):
                 self.textCommand.insert(END, "Invalid input.\n")
@@ -35,7 +36,7 @@ class CommandsConsole(Frame):
 
     def sendCommandWithEnter(self, env):
         try:
-            self.commandToSend = self.inputCommand.get()
+            self.commandToSend = self.inputCommand.get() + ";" + MILLIMITERS
             self.textCommand.config(state=NORMAL)
             self.textCommand.insert(END, "> "+self.commandToSend + '\n')
             stateAnswer = self.arduino.readOptions(self.commandToSend)

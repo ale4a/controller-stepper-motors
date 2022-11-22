@@ -6,6 +6,9 @@ import components.Messages as Messages
 import tkinter.font as font
 from tkinter.ttk import Combobox
 import utils.convert as Convert
+from constants.constants import MILLIMITERS, STEPS
+from constants.constants import AXIS_X, AXIS_Y, AXIS_Z
+from constants.constants import POSITIVE, NEGATIVE
 class ArrowControl(Frame):
     def __init__(self, parent, arduino):
         super().__init__()
@@ -16,48 +19,44 @@ class ArrowControl(Frame):
         self.absPosition = [0, 0, 0]
         self.messages = Messages.Messages()
         self.measurements = [
-            "steps",
-            "mm"
+            MILLIMITERS,
+            STEPS
         ]
         self.stepsValueAxisX =  StringVar()
         self.stepsValueAxisY =  StringVar()
         self.stepsValueAxisZ =  StringVar()
-        self.totalStepsAxisX = 100
-        self.totalStepsAxisY = 100
-        self.totalStepsAxisZ = 100
+        self.totalStepsAxisX = 1
+        self.totalStepsAxisY = 1
+        self.totalStepsAxisZ = 1
         self.createWidgets()
 
     def relativeMovement(self, axis, steps):
-        if(self.measuramentComoboboxValue.get() == "mm"):
-            steps = Convert.convertMMToSteps(int(steps))
-
-        res = "R"+ ";" + axis + ";" + str(steps)
+        measure = self.measuramentComoboboxValue.get()
+        res = "R"+ ";" + axis + ";" + str(steps) + ";" + measure
         try:
             stateAnswer = self.arduino.readOptions(res)
             if(not stateAnswer):
-                self.textCommand.insert(END, "Invalid input.\n")
                 self.messages.popupShowinfo("Error", "Invalid input")
         except Exception as e:
             self.messages.popupShowinfo("Error", e)
 
-    def yPositive(self):
-        self.relativeMovement("Y",self.totalStepsAxisY)
-
-    def yNegative(self):
-        self.relativeMovement("Y",-self.totalStepsAxisY)
-
-    def xPositive(self):
-        self.relativeMovement("X",self.totalStepsAxisX)
-
-    def xNegative(self):
-        self.relativeMovement("X",-self.totalStepsAxisX)
-    
-    def zPositive(self):
-        self.relativeMovement("Z",self.totalStepsAxisZ)
-    
-    def zNegative(self):
-        self.relativeMovement("Z",-self.totalStepsAxisZ)
-    
+    def movementAxis(self, axis, direction):
+        if(axis == AXIS_X):
+            if direction == POSITIVE:
+                self.relativeMovement("X",self.totalStepsAxisX)
+            else:
+                self.relativeMovement("X",-self.totalStepsAxisX)
+        elif(axis == AXIS_Y):
+            if direction == POSITIVE:
+                self.relativeMovement("Y",self.totalStepsAxisY)
+            else:
+                self.relativeMovement("Y",-self.totalStepsAxisY)
+        elif(axis == AXIS_Z):
+            if direction == POSITIVE:
+                self.relativeMovement("Z",self.totalStepsAxisZ)
+            else:
+                self.relativeMovement("Z",-self.totalStepsAxisZ)
+                
     def sendCommand(self):
         self.arduino.setZeroPosition()
         
@@ -92,7 +91,7 @@ class ArrowControl(Frame):
         self.axisXValue = Label(self.parent, text = "X:", font=fontState)
         self.axisXValue.grid(row = 1, column = 0, **padding)
 
-        self.rightButton = Button(self.parent, text="-", command=self.xNegative, **stylesOptions)
+        self.rightButton = Button(self.parent, text="-", command = lambda: self.movementAxis(AXIS_X, NEGATIVE), **stylesOptions)
         self.rightButton.grid(row = 1, column = 1, **padding)
 
         self.stepsValueAxisX.trace("w", lambda name, index, mode, sv=self.stepsValueAxisX: self.updateStepAxisXCallback(sv))
@@ -101,14 +100,14 @@ class ArrowControl(Frame):
         self.stepsValueAxisXEntry.insert ( END, self.totalStepsAxisX )
         self.stepsValueAxisXEntry.grid(row = 1, column = 2, **padding)
 
-        self.leftButton = Button(self.parent, text="+", command=self.xPositive, **stylesOptions)
+        self.leftButton = Button(self.parent, text="+", command=lambda: self.movementAxis(AXIS_X, POSITIVE), **stylesOptions)
         self.leftButton.grid(row = 1, column = 3, **padding)
 
         # ---------------------------------------------- Y
         self.axisXValue = Label(self.parent, text = "Y:", font=fontState)
         self.axisXValue.grid(row = 2, column = 0, **padding)
 
-        self.downButton = Button(self.parent, text="-", command=self.yNegative, **stylesOptions)
+        self.downButton = Button(self.parent, text="-", command= lambda: self.movementAxis(AXIS_Y, NEGATIVE), **stylesOptions)
         self.downButton.grid(row = 2, column = 1, **padding)
 
         self.stepsValueAxisY.trace("w", lambda name, index, mode, sv=self.stepsValueAxisY: self.updateStepAxisYCallback(sv))
@@ -117,23 +116,23 @@ class ArrowControl(Frame):
         self.stepsValueAxisYEntry.insert ( END, self.totalStepsAxisY )
         self.stepsValueAxisYEntry.grid(row = 2, column = 2, **padding)
 
-        self.yAxisPositive = Button(self.parent, text="+", command=self.yPositive, **stylesOptions)
+        self.yAxisPositive = Button(self.parent, text="+", command= lambda: self.movementAxis(AXIS_Y, POSITIVE), **stylesOptions)
         self.yAxisPositive.grid(row = 2, column = 3, **padding)
 
+        # ---------------------------------------------- Z
         self.axisXValue = Label(self.parent, text = "Z:", font=fontState)
         self.axisXValue.grid(row = 3, column = 0, **padding)
 
-        self.leftButton = Button(self.parent, text="-", command=self.zNegative, **stylesOptions)
+        self.leftButton = Button(self.parent, text="-", command=lambda: self.movementAxis(AXIS_Z, NEGATIVE), **stylesOptions)
         self.leftButton.grid(row = 3, column = 1, **padding)
 
-        # ---------------------------------------------- Z
         self.stepsValueAxisZ.trace("w", lambda name, index, mode, sv=self.stepsValueAxisZ: self.updateStepAxisZCallback(sv))
         vcmd = (self.register(self.validationOnlyNumbers))
         self.stepsValueAxisZEntry = Entry(self.parent,  textvariable = self.stepsValueAxisZ, validatecommand=(vcmd, '%P'), **defaultValuesEntry)
         self.stepsValueAxisZEntry.insert (END, self.totalStepsAxisZ )
         self.stepsValueAxisZEntry.grid(row = 3, column = 2, **padding)
 
-        self.leftButton = Button(self.parent, text="+", command=self.zPositive, **stylesOptions)
+        self.leftButton = Button(self.parent, text="+", command=lambda: self.movementAxis(AXIS_Z, POSITIVE), **stylesOptions)
         self.leftButton.grid(row = 3, column = 3, **padding)
 
     def updateStepAxisXCallback(self, sev):
@@ -149,7 +148,7 @@ class ArrowControl(Frame):
             self.totalStepsAxisZ = int(self.stepsValueAxisZ.get())
     
     def validationOnlyNumbers(self, P):
-        return str.isdigit(P) or P == ""
+        return str.isdigit(P) or P == "" or P == "."
         
 class GUI(Frame):
     def __init__(self, parent, *args, **kwargs):

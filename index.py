@@ -38,7 +38,7 @@ class ControllerMottors():
 
         # - - - - - - - - - - - - - - - - - - - - -
         # The Commands console entry frame
-        commandsConsoleFrame = ttk.LabelFrame(self.window, text="Commands console", relief=tk.RIDGE)
+        commandsConsoleFrame = ttk.LabelFrame(self.window, text="Commands console Type ; Axis ; mm", relief=tk.RIDGE)
         CommandsConsole.CommandsConsole(commandsConsoleFrame, self.arduino)
         commandsConsoleFrame.grid(row=2, column=1, sticky=tk.E + tk.W + tk.N + tk.S)
 
@@ -55,7 +55,7 @@ class ControllerMottors():
         menu = Menu(self.window)
         new_item = Menu(menu, tearoff=0)
         new_item.add_command(label='New', command=self.openSecondWindow)
-        menu.add_cascade(label='File', menu=new_item)
+        menu.add_cascade(label='Second Window', menu=new_item)
         self.window.config(menu=menu)
 
     def callbackDestroyFirstProgram(self):
