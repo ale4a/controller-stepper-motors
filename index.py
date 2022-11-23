@@ -3,7 +3,7 @@ from tkinter import ttk
 from tkinter import Menu
 import components.ConnectionPort as ConnectionPort
 import components.CommandsConsole as CommandsConsole
-import components.ArduinoController as ArduinoController
+import components.ArduinoControllerSerial as ArduinoControllerSerial
 import components.ArrowControl as ArrowControl
 import components.CoordinateState as CoordinateState
 import Measure as Measure
@@ -16,7 +16,7 @@ class ControllerMottors():
         self.absPosition = [0, 0, 0]
         self.absolutePosicionFrame = ttk.LabelFrame(self.window, text="Absolute position", relief=tk.RIDGE)
         self.statusDisplay = CoordinateState.CoordinateState(self.absolutePosicionFrame, self.absPosition)
-        self.arduino = ArduinoController.ArduinoController(self.absPosition, self.statusDisplay)
+        self.arduino = ArduinoControllerSerial.ArduinoControllerSerial(self.absPosition, self.statusDisplay)
         self.messages = Messages.Messages()
         self.measure = Measure.Measure(self.window, self.arduino)
         self.create_widgets()
