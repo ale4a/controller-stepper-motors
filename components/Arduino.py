@@ -1,11 +1,6 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
-# move a servo from a Tk slider - scruss 2012-10-28
-# read about change env
-# https://code.visualstudio.com/docs/python/environments
-
 import pyfirmata
 import components.timing as timing
+from constants.constants import AXIS_X, AXIS_Y, AXIS_Z
 
 MIN_STEP = 0
 MAX_STEP = 0
@@ -61,19 +56,19 @@ class Arduino():
             self.board.digital[stepPin].write(0)
 
     def movePosition(self, axis, steps):
-        if(axis == "X"):
+        if(axis == AXIS_X):
             self.moveNumberSteps(steps, self.stepPinX, self.dirPinX)
-        if(axis == "Y"):
+        if(axis == AXIS_Y):
             self.moveNumberSteps(steps, self.stepPinY, self.dirPinY)
-        if(axis == "Z"):
+        if(axis == AXIS_Z):
             self.moveNumberSteps(steps, self.stepPinZ, self.dirPinZ)
     
     def getAxis(self, axis):
-        if(axis == "X"):
+        if(axis == AXIS_X):
             return (self.dirPinX, self.stepPinX)
-        if(axis == "Y"):
+        if(axis == AXIS_Y):
             return (self.dirPinY, self.stepPinY)
-        if(axis == "Z"):
+        if(axis == AXIS_Z):
             return (self.dirPinZ, self.stepPinZ)
 
     def constansMove(self, axis, direction):
@@ -94,5 +89,5 @@ class Arduino():
 
 if __name__ == '__main__':
     arduino = Arduino("COM4")
-    arduino.movePosition("X", 200)
-    arduino.movePosition("Y", 200)
+    arduino.movePosition(AXIS_X, 200)
+    arduino.movePosition(AXIS_Y, 200)

@@ -4,8 +4,8 @@ from tkinter import Tk, Label, Entry
 from tkinter import Frame, Button
 from tkinter import scrolledtext
 import components.Messages as Messages
-import utils.convert as Convert
 from constants.constants import MILLIMITERS
+
 class CommandsConsole(Frame):
     def __init__(self, parent, arduino):
         super().__init__()
@@ -52,17 +52,13 @@ class CommandsConsole(Frame):
     def createWidgets(self):
         commandLabel = Label(self.parent, text="Command:")
         commandLabel.grid(row = 0, column = 0)
-
         self.inputCommand = Entry(self.parent, width =25)
         self.inputCommand.grid(row = 0, column = 1)
         self.inputCommand.bind("<Return>", self.sendCommandWithEnter)
-
         self.sendButton = Button(self.parent, text= "Send", command = self.sendCommand, width=8)
         self.sendButton.grid(row = 0, column = 2, sticky=W)
-
         self.cleanButton = Button(self.parent, text= "Clean", command = self.cleanText, width=8)
         self.cleanButton.grid(row = 0, column = 3, sticky=W)
-
         self.textCommand = scrolledtext.ScrolledText(self.parent, state=DISABLED, width=45, height=10)
         self.textCommand.grid(row = 1, column = 0, columnspan=4, pady=8)
 

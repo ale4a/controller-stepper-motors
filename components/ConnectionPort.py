@@ -39,7 +39,6 @@ class ConnectionPort(Frame):
     def showEmptyConnection(self):
         self.label1 = Label(self.parent, text="Devices not detected ...")
         self.label1.grid(row = 0, column = 0, padx= 70, pady = 30)
-        
         self.schaltf1 = Button(self.parent, text="Reload", command=self.searchPorts)
         self.schaltf1.grid(row = 0, column = 1, padx=10)
 
@@ -47,7 +46,6 @@ class ConnectionPort(Frame):
         padding = {"padx": 5, "pady": 10}
         self.portNameLabel = Label(self.parent, text = "Port name: ")
         self.portNameLabel.grid(row = 0, column = 0, sticky = W, **padding)
-
         try:
             self.portsComboboxValue = StringVar()
             portsCombobox = Combobox(self.parent, height=4, textvariable=self.portsComboboxValue)
@@ -120,7 +118,6 @@ class GUI(Frame):
         self.parent.title('Software to scanner')
         self.connectionPort = ConnectionPort(self, '*ARDUINO*')
         self.connectionPort.pack(side = LEFT)
-
 
 if __name__ == "__main__":
     root = Tk()

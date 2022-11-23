@@ -1,9 +1,10 @@
 import components.Messages as Messages
 import components.Arduino as Arduino
 import time
-
 import utils.convert as Convert
 from constants.constants import MILLIMITERS
+from constants.constants import AXIS_X, AXIS_Y, AXIS_Z
+
 class ArduinoController():
     def __init__(self, absPosition, statusDisplay):
         super().__init__()
@@ -29,7 +30,7 @@ class ArduinoController():
         return movement == "R" or movement == "A"
     
     def verifyAxis(self, axis):
-        return axis == "X" or axis == "Y" or axis == "Z"
+        return axis == AXIS_X or axis == AXIS_Y or axis == AXIS_Z
     
     def verifyDistance(self, distance):
         return Convert.isNumber(distance)
@@ -76,32 +77,31 @@ class ArduinoController():
         distance =  self.convertDistance(stepsMovement, measure)
         if typeMovement =="R":
             time.sleep(0.1)
-            if axisMovement == "X":
+            if axisMovement == AXIS_X:
                 self.absPosition[0] = self.absPosition[0] + distance
-                self.arduino.movePosition("X", distance)
-            elif axisMovement == "Y":
+                self.arduino.movePosition(AXIS_X, distance)
+            elif axisMovement == AXIS_Y:
                 self.absPosition[1] = self.absPosition[1] + distance
-                self.arduino.movePosition("Y", distance)
-            elif axisMovement == "Z":
+                self.arduino.movePosition(AXIS_Y, distance)
+            elif axisMovement == AXIS_Z:
                 self.absPosition[2] = self.absPosition[2] + distance
-                self.arduino.movePosition("Z", distance)
+                self.arduino.movePosition(AXIS_Z, distance)
             self.statusDisplay.updateAxis()
             return True
         elif typeMovement =="A":
             time.sleep(0.1)
-            if axisMovement == "X":
+            if axisMovement == AXIS_X:
                 steNo = distance - self.absPosition[0]
-                self.arduino.movePosition("X", steNo)
+                self.arduino.movePosition(AXIS_X, steNo)
                 self.absPosition[0] = distance
-            elif axisMovement == "Y":
+            elif axisMovement == AXIS_Y:
                 steNo = distance - self.absPosition[1]
-                self.arduino.movePosition("Y", steNo)
+                self.arduino.movePosition(AXIS_Y, steNo)
                 self.absPosition[1] = distance
-            elif axisMovement == "Z":
+            elif axisMovement == AXIS_Z:
                 steNo = distance - self.absPosition[2]
-                self.arduino.movePosition("Z", steNo)
+                self.arduino.movePosition(AXIS_Z, steNo)
                 self.absPosition[2] = distance
-
             self.statusDisplay.updateAxis()
             return True
 
@@ -109,11 +109,5 @@ class ArduinoController():
         self.arduino.constansMove(axis, direction)
         self.statusDisplay.updateAxis()
 
-
 if __name__ == '__main__':
-    # Define the serial port and baud rate.
-    # Ensure the 'COM#' corresponds to what was seen in the Windows Device Manager
-    #arduino = ArduinoController()
-    #isClose = arduino.readOptions()
-    #time.sleep(0.1)
     pass

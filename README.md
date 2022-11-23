@@ -52,3 +52,7 @@ Now that the program is uploaded, you can remove the USB cable and disconnect yo
 
 - [@ale4a](https://www.github.com/ale4a) Alejandro Alvarez
 
+
+# https://runestone.academy/ns/books/published/thinkcspy/GUIandEventDrivenProgramming/03_widgets.html
+# read about change env
+# https://code.visualstudio.com/docs/python/environments

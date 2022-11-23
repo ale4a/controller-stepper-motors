@@ -31,28 +31,20 @@ class CoordinateState(Frame):
         # Axis X
         self.axisXLabel = Label(self.parent, text="X:", font=fontState)
         self.axisXLabel.grid(row = 0, column = 0, **padding)
-
         self.axisXValue = Label(self.parent, text = self.getValueStepsString(str(self.absPosition[0])), font=fontState, **stylesLabel)
         self.axisXValue.grid(row = 0, column = 1, **padding)
-
         # - - - - - - - - - - - - - - - - - - - - -
         # Axis Y
-
         self.axisYLabel = Label(self.parent, text="Y:", font=fontState)
         self.axisYLabel.grid(row = 1, column = 0,  **padding)
-
         self.axisYValue = Label(self.parent, text = self.getValueStepsString(str(self.absPosition[1])), font=fontState, **stylesLabel)
         self.axisYValue.grid(row = 1, column = 1, **padding)
-
         # - - - - - - - - - - - - - - - - - - - - -
         # Axis Z
-
         self.axisZLabel = Label(self.parent, text="Z:", font=fontState)
         self.axisZLabel.grid(row = 2, column = 0, **padding)
-
         self.axisZValue = Label(self.parent, text = self.getValueStepsString(str(self.absPosition[2])), font=fontState, **stylesLabel)
         self.axisZValue.grid(row = 2, column = 1, **padding)
-
         # - - - - - - - - - - - - - - - - - - - - -
 
 class GUI(Frame):

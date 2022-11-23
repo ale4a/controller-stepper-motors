@@ -35,23 +35,21 @@ class ControllerMottors():
         connectionPortFrame = ttk.LabelFrame(self.window, text="Connection Arduino", relief=tk.RIDGE)
         ConnectionPort.ConnectionPort(connectionPortFrame, self.arduino)
         connectionPortFrame.grid(row=1, column=1, sticky=tk.E + tk.W + tk.N + tk.S)
-
         # - - - - - - - - - - - - - - - - - - - - -
         # The Commands console entry frame
         commandsConsoleFrame = ttk.LabelFrame(self.window, text="Commands console Type ; Axis ; mm", relief=tk.RIDGE)
         CommandsConsole.CommandsConsole(commandsConsoleFrame, self.arduino)
         commandsConsoleFrame.grid(row=2, column=1, sticky=tk.E + tk.W + tk.N + tk.S)
-
         # - - - - - - - - - - - - - - - - - - - - -
         # The Choosing from lists frame
         self.absolutePosicionFrame.grid(row=1, column=2, sticky=tk.E + tk.W + tk.N + tk.S, padx=6)
-        
         # - - - - - - - - - - - - - - - - - - - - -
         # Direcctions
         arrowControlFrame = ttk.LabelFrame(self.window, text="Arrow control", relief=tk.RIDGE, padding=6)
         ArrowControl.ArrowControl(arrowControlFrame, self.arduino)
         arrowControlFrame.grid(row=2, column=2, padx=6, sticky=tk.E + tk.W + tk.N + tk.S)
-
+        # - - - - - - - - - - - - - - - - - - - - -
+        # Menu
         menu = Menu(self.window)
         new_item = Menu(menu, tearoff=0)
         new_item.add_command(label='New', command=self.openSecondWindow)
@@ -66,8 +64,5 @@ if __name__ == "__main__":
     program = ControllerMottors()
     program.window.resizable(False, False)
     program.window.protocol("WM_DELETE_WINDOW",  program.callbackDestroyFirstProgram)
-
-    
     program.window.mainloop()
     
-    # https://runestone.academy/ns/books/published/thinkcspy/GUIandEventDrivenProgramming/03_widgets.html

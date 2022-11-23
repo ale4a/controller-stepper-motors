@@ -45,19 +45,19 @@ class ArrowControl(Frame):
     def movementAxis(self, axis, direction):
         if(axis == AXIS_X):
             if direction == POSITIVE:
-                self.relativeMovement("X",self.totalStepsAxisX)
+                self.relativeMovement(AXIS_X,self.totalStepsAxisX)
             else:
-                self.relativeMovement("X",-self.totalStepsAxisX)
+                self.relativeMovement(AXIS_X,-self.totalStepsAxisX)
         elif(axis == AXIS_Y):
             if direction == POSITIVE:
-                self.relativeMovement("Y",self.totalStepsAxisY)
+                self.relativeMovement(AXIS_Y,self.totalStepsAxisY)
             else:
-                self.relativeMovement("Y",-self.totalStepsAxisY)
+                self.relativeMovement(AXIS_Y,-self.totalStepsAxisY)
         elif(axis == AXIS_Z):
             if direction == POSITIVE:
-                self.relativeMovement("Z",self.totalStepsAxisZ)
+                self.relativeMovement(AXIS_Z,self.totalStepsAxisZ)
             else:
-                self.relativeMovement("Z",-self.totalStepsAxisZ)
+                self.relativeMovement(AXIS_Z,-self.totalStepsAxisZ)
                 
     def sendCommand(self):
         self.arduino.setZeroPosition()
@@ -97,60 +97,47 @@ class ArrowControl(Frame):
 
         self.sendButton = Button(self.parent, text= "Set position",command = self.sendCommand, width=15)
         self.sendButton.grid(row = 0, column = 0, columnspan=3)
-
         self.measuramentComoboboxValue = StringVar()
         rateComobobox = Combobox(self.parent, height=4, width = 5, textvariable=self.measuramentComoboboxValue, justify=CENTER)
         rateComobobox.grid(row = 0, column = 3)
         rateComobobox['values'] = self.measurements
         rateComobobox.current(0)
         rateComobobox.bind('<<ComboboxSelected>>', self.comoboboxChangeMeasurament)
-
         # ---------------------------------------------- X
         self.axisXValue = Label(self.parent, text = "X:", font=fontState)
         self.axisXValue.grid(row = 1, column = 0, **padding)
-
         self.rightButton = Button(self.parent, text="-", command = lambda: self.movementAxis(AXIS_X, NEGATIVE), **stylesOptions)
         self.rightButton.grid(row = 1, column = 1, **padding)
-
         self.stepsValueAxisX.trace("w", lambda name, index, mode, sv=self.stepsValueAxisX: self.updateStepAxisXCallback(sv))
         vcmd = (self.register(self.validationOnlyNumbers))
         self.stepsValueAxisXEntry = Entry(self.parent, textvariable = self.stepsValueAxisX, validatecommand=(vcmd, '%P'), **defaultValuesEntry)
         self.stepsValueAxisXEntry.insert ( END, self.totalStepsAxisX )
         self.stepsValueAxisXEntry.grid(row = 1, column = 2, **padding)
-
-        self.leftButton = Button(self.parent, text="+", command=lambda: self.movementAxis(AXIS_X, POSITIVE), **stylesOptions)
+        self.leftButton = Button(self.parent, text="+", command = lambda: self.movementAxis(AXIS_X, POSITIVE), **stylesOptions)
         self.leftButton.grid(row = 1, column = 3, **padding)
-
         # ---------------------------------------------- Y
         self.axisXValue = Label(self.parent, text = "Y:", font=fontState)
         self.axisXValue.grid(row = 2, column = 0, **padding)
-
-        self.downButton = Button(self.parent, text="-", command= lambda: self.movementAxis(AXIS_Y, NEGATIVE), **stylesOptions)
+        self.downButton = Button(self.parent, text="-", command = lambda: self.movementAxis(AXIS_Y, NEGATIVE), **stylesOptions)
         self.downButton.grid(row = 2, column = 1, **padding)
-
         self.stepsValueAxisY.trace("w", lambda name, index, mode, sv=self.stepsValueAxisY: self.updateStepAxisYCallback(sv))
         vcmd = (self.register(self.validationOnlyNumbers))
         self.stepsValueAxisYEntry = Entry(self.parent,  textvariable = self.stepsValueAxisY, validatecommand=(vcmd, '%P'), **defaultValuesEntry)
         self.stepsValueAxisYEntry.insert ( END, self.totalStepsAxisY )
         self.stepsValueAxisYEntry.grid(row = 2, column = 2, **padding)
-
-        self.yAxisPositive = Button(self.parent, text="+", command= lambda: self.movementAxis(AXIS_Y, POSITIVE), **stylesOptions)
+        self.yAxisPositive = Button(self.parent, text="+", command = lambda: self.movementAxis(AXIS_Y, POSITIVE), **stylesOptions)
         self.yAxisPositive.grid(row = 2, column = 3, **padding)
-
         # ---------------------------------------------- Z
         self.axisXValue = Label(self.parent, text = "Z:", font=fontState)
         self.axisXValue.grid(row = 3, column = 0, **padding)
-
-        self.leftButton = Button(self.parent, text="-", command=lambda: self.movementAxis(AXIS_Z, NEGATIVE), **stylesOptions)
+        self.leftButton = Button(self.parent, text="-", command = lambda: self.movementAxis(AXIS_Z, NEGATIVE), **stylesOptions)
         self.leftButton.grid(row = 3, column = 1, **padding)
-
         self.stepsValueAxisZ.trace("w", lambda name, index, mode, sv=self.stepsValueAxisZ: self.updateStepAxisZCallback(sv))
         vcmd = (self.register(self.validationOnlyNumbers))
         self.stepsValueAxisZEntry = Entry(self.parent,  textvariable = self.stepsValueAxisZ, validatecommand=(vcmd, '%P'), **defaultValuesEntry)
         self.stepsValueAxisZEntry.insert (END, self.totalStepsAxisZ )
         self.stepsValueAxisZEntry.grid(row = 3, column = 2, **padding)
-
-        self.leftButton = Button(self.parent, text="+", command=lambda: self.movementAxis(AXIS_Z, POSITIVE), **stylesOptions)
+        self.leftButton = Button(self.parent, text="+", command = lambda: self.movementAxis(AXIS_Z, POSITIVE), **stylesOptions)
         self.leftButton.grid(row = 3, column = 3, **padding)
 
     def updateStepAxisXCallback(self, sev):
