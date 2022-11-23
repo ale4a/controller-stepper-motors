@@ -9,6 +9,8 @@ import utils.convert as Convert
 from constants.constants import MILLIMITERS, STEPS
 from constants.constants import AXIS_X, AXIS_Y, AXIS_Z
 from constants.constants import POSITIVE, NEGATIVE
+import utils.convert as Convert
+
 class ArrowControl(Frame):
     def __init__(self, parent, arduino):
         super().__init__()
@@ -59,7 +61,22 @@ class ArrowControl(Frame):
                 
     def sendCommand(self):
         self.arduino.setZeroPosition()
-        
+    
+    def resetEntryValuesToSteps(self):
+        self.totalStepsAxisX = 10
+        self.totalStepsAxisY = 10
+        self.totalStepsAxisZ = 10
+        self.stepsValueAxisXEntry.delete(0, END)
+        self.stepsValueAxisYEntry.delete(0, END)
+        self.stepsValueAxisZEntry.delete(0, END)
+        self.stepsValueAxisXEntry.insert(0, self.totalStepsAxisX)
+        self.stepsValueAxisYEntry.insert(0, self.totalStepsAxisY)
+        self.stepsValueAxisZEntry.insert(0, self.totalStepsAxisZ)
+
+    def comoboboxChangeMeasurament(self, event):
+        if (self.measuramentComoboboxValue.get() == STEPS):
+            self.resetEntryValuesToSteps()
+
     def createWidgets(self):
         fontState  = "Helvetica 10 bold italic"
         padding = {
@@ -86,6 +103,7 @@ class ArrowControl(Frame):
         rateComobobox.grid(row = 0, column = 3)
         rateComobobox['values'] = self.measurements
         rateComobobox.current(0)
+        rateComobobox.bind('<<ComboboxSelected>>', self.comoboboxChangeMeasurament)
 
         # ---------------------------------------------- X
         self.axisXValue = Label(self.parent, text = "X:", font=fontState)
@@ -137,18 +155,20 @@ class ArrowControl(Frame):
 
     def updateStepAxisXCallback(self, sev):
         if not self.stepsValueAxisX.get()=='':
-            self.totalStepsAxisX = int(self.stepsValueAxisX.get())
+            self.totalStepsAxisX = Convert.convertStringToNumber(self.stepsValueAxisX.get())
 
     def updateStepAxisYCallback(self, sev):
         if not self.stepsValueAxisY.get()=='':
-            self.totalStepsAxisY = int(self.stepsValueAxisY.get())
+            self.totalStepsAxisY = Convert.convertStringToNumber(self.stepsValueAxisY.get())
 
     def updateStepAxisZCallback(self, sev):
         if not self.stepsValueAxisZ.get()=='':
-            self.totalStepsAxisZ = int(self.stepsValueAxisZ.get())
+            self.totalStepsAxisZ = Convert.convertStringToNumber(self.stepsValueAxisZ.get())
     
     def validationOnlyNumbers(self, P):
-        return str.isdigit(P) or P == "" or P == "."
+        if (self.measuramentComoboboxValue.get() == STEPS):
+            return str.isdigit(P) or P == ""
+        return Convert.isNumber(P) or P == ""
         
 class GUI(Frame):
     def __init__(self, parent, *args, **kwargs):

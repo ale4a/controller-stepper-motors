@@ -31,3 +31,4 @@ def convertStringToNumber(number):
         return int(number)
     if(isFloatNumber(number)):
         return float(number)
+    return number
