@@ -1,6 +1,9 @@
 from tkinter.messagebox import showinfo
 from tkinter.messagebox import askquestion
 
+"""Messages
+    This class help to create messages with options
+"""
 class Messages():
     def __init__(self):
         pass

@@ -2,9 +2,12 @@ import components.Messages as Messages
 import serial
 import time
 import utils.convert as Convert
-from constants.constants import MILLIMITERS
+from constants.constants import MILLIMETERS
 from constants.constants import AXIS_X, AXIS_Y, AXIS_Z
 
+"""ArduinoControllerSerial
+This code create a connection between python and arduino using Serial library
+"""
 class ArduinoControllerSerial():
     def __init__(self, absPosition, statusDisplay):
         super().__init__()
@@ -19,7 +22,7 @@ class ArduinoControllerSerial():
         self.absPosition[2] = 0
         self.statusDisplay.updateAxis()
 
-    def getAbsoulutePosition(self):
+    def getAbsolutePosition(self):
         return self.absPosition
         
     def verifyString(self, stringToVerify):
@@ -37,7 +40,7 @@ class ArduinoControllerSerial():
 
     def convertDistance(self, distance, measure):
         distance = Convert.convertStringToNumber(distance)
-        if(measure == MILLIMITERS):
+        if(measure == MILLIMETERS):
             distance = Convert.convertMMToSteps(distance)
         return distance
 
@@ -112,14 +115,10 @@ class ArduinoControllerSerial():
             self.statusDisplay.updateAxis()
             return True
 
-    def constansMoveController(self, axis, direction):
-        # self.arduino.constansMove(axis, direction)
-        # self.statusDisplay.updateAxis()
+    def constantsMoveController(self, axis, direction):
         pass
 
 if __name__ == '__main__':
-    # Define the serial port and baud rate.
-    # Ensure the 'COM#' corresponds to what was seen in the Windows Device Manager
     arduino = ArduinoControllerSerial()
     isClose = arduino.readOptions()
     time.sleep(0.1)

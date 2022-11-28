@@ -53,8 +53,8 @@ String inDataStr = "";
 
 int MIN_STEP = 20;
 int MAX_STEP;
-int MIN_SPEED = 9000;
-int MAX_SPEED = 4000;
+int MIN_SPEED = 12000;
+int MAX_SPEED = 6000;
 
 void setup() {
   // Sets the three pins as Outputs
@@ -233,17 +233,16 @@ void showAbsolutePosition(String myStr, int numberSteps, int absPosition){
 
 int getSpeed(int currentStep, int totalStep){
   int currentSpeed = 0;
+  if(totalStep < 500)
+    return MIN_SPEED;
   if( currentStep <= MIN_STEP ){
-    currentSpeed = map(currentStep, 0, MIN_STEP, MIN_SPEED, MAX_SPEED);
-  } else {
-    MAX_STEP = totalStep - MIN_STEP;
-    if (currentStep >= MAX_STEP){
-       currentSpeed = map(currentStep, MAX_STEP, totalStep, MAX_SPEED, MIN_SPEED);
-    } else {
-      currentSpeed = MAX_SPEED;
-    }
+    return map(currentStep, 0, MIN_STEP, MIN_SPEED, MAX_SPEED);
   }
-  return currentSpeed;
+  MAX_STEP = totalStep - MIN_STEP;
+  if (currentStep >= MAX_STEP){
+     return map(currentStep, MAX_STEP, totalStep, MAX_SPEED, MIN_SPEED);
+  }
+  return MAX_SPEED;
 }
 
 int moveAbsoulteNumberSteps(int stepsNumberToDo, int stepDelay, int secondStepDelay, int stepPin, int directionPin){

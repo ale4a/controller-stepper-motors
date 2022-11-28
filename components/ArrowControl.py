@@ -6,7 +6,7 @@ import components.Messages as Messages
 import tkinter.font as font
 from tkinter.ttk import Combobox
 import utils.convert as Convert
-from constants.constants import MILLIMITERS, STEPS
+from constants.constants import MILLIMETERS, STEPS
 from constants.constants import AXIS_X, AXIS_Y, AXIS_Z
 from constants.constants import POSITIVE, NEGATIVE
 import utils.convert as Convert
@@ -21,19 +21,19 @@ class ArrowControl(Frame):
         self.absPosition = [0, 0, 0]
         self.messages = Messages.Messages()
         self.measurements = [
-            MILLIMITERS,
+            MILLIMETERS,
             STEPS
         ]
         self.stepsValueAxisX =  StringVar()
         self.stepsValueAxisY =  StringVar()
         self.stepsValueAxisZ =  StringVar()
-        self.totalStepsAxisX = 1
-        self.totalStepsAxisY = 1
-        self.totalStepsAxisZ = 1
+        self.totalStepsAxisX = 0.1
+        self.totalStepsAxisY = 0.1
+        self.totalStepsAxisZ = 0.1
         self.createWidgets()
 
     def relativeMovement(self, axis, steps):
-        measure = self.measuramentComoboboxValue.get()
+        measure = self.measurementComboboxValue.get()
         res = "R"+ ";" + axis + ";" + str(steps) + ";" + measure
         try:
             stateAnswer = self.arduino.readOptions(res)
@@ -73,8 +73,8 @@ class ArrowControl(Frame):
         self.stepsValueAxisYEntry.insert(0, self.totalStepsAxisY)
         self.stepsValueAxisZEntry.insert(0, self.totalStepsAxisZ)
 
-    def comoboboxChangeMeasurament(self, event):
-        if (self.measuramentComoboboxValue.get() == STEPS):
+    def comboboxChangeMeasurament(self, event):
+        if (self.measurementComboboxValue.get() == STEPS):
             self.resetEntryValuesToSteps()
 
     def createWidgets(self):
@@ -97,12 +97,12 @@ class ArrowControl(Frame):
 
         self.sendButton = Button(self.parent, text= "Set position",command = self.sendCommand, width=15)
         self.sendButton.grid(row = 0, column = 0, columnspan=3)
-        self.measuramentComoboboxValue = StringVar()
-        rateComobobox = Combobox(self.parent, height=4, width = 5, textvariable=self.measuramentComoboboxValue, justify=CENTER)
-        rateComobobox.grid(row = 0, column = 3)
-        rateComobobox['values'] = self.measurements
-        rateComobobox.current(0)
-        rateComobobox.bind('<<ComboboxSelected>>', self.comoboboxChangeMeasurament)
+        self.measurementComboboxValue = StringVar()
+        rateCombobox = Combobox(self.parent, height=4, width = 5, textvariable=self.measurementComboboxValue, justify=CENTER)
+        rateCombobox.grid(row = 0, column = 3)
+        rateCombobox['values'] = self.measurements
+        rateCombobox.current(0)
+        rateCombobox.bind('<<ComboboxSelected>>', self.comboboxChangeMeasurament)
         # ---------------------------------------------- X
         self.axisXValue = Label(self.parent, text = "X:", font=fontState)
         self.axisXValue.grid(row = 1, column = 0, **padding)
@@ -153,7 +153,7 @@ class ArrowControl(Frame):
             self.totalStepsAxisZ = Convert.convertStringToNumber(self.stepsValueAxisZ.get())
     
     def validationOnlyNumbers(self, P):
-        if (self.measuramentComoboboxValue.get() == STEPS):
+        if (self.measurementComboboxValue.get() == STEPS):
             return str.isdigit(P) or P == ""
         return Convert.isNumber(P) or P == ""
         
