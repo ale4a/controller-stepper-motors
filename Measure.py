@@ -23,21 +23,21 @@ class Measure():
 
     def movePositiveAxisX(self):
         if self.movingPositiveAxisX:
-            self.arduino.constansMoveController(AXIS_X, 1)
+            self.arduino.constantMoveController(AXIS_X, 1)
         if self.movingPositiveAxisY:
-            self.arduino.constansMoveController(AXIS_Y, 1)
+            self.arduino.constantMoveController(AXIS_Y, 1)
         if self.movingPositiveAxisZ:
-            self.arduino.constansMoveController(AXIS_Z, 1)
+            self.arduino.constantMoveController(AXIS_Z, 1)
 
         self.parent.after(1, self.movePositiveAxisX)
     
     def moveNegativeAxisX(self):
         if self.movingNegativeAxisX:
-            self.arduino.constansMoveController(AXIS_X, -1)
+            self.arduino.constantMoveController(AXIS_X, -1)
         if self.movingNegativeAxisY:
-            self.arduino.constansMoveController(AXIS_Y, -1)
+            self.arduino.constantMoveController(AXIS_Y, -1)
         if self.movingNegativeAxisZ:
-            self.arduino.constansMoveController(AXIS_Z, -1)
+            self.arduino.constantMoveController(AXIS_Z, -1)
             
         self.parent.after(1, self.moveNegativeAxisX)
 
@@ -95,36 +95,36 @@ class Measure():
         self.switchAxisPositiveY.bind("<ButtonPress>", lambda event : self.on_press(AXIS_Z, 1, event))
         self.switchAxisPositiveY.bind("<ButtonRelease>", lambda event : self.on_release(AXIS_Z, 1, event))
 
-    def on_press(self, axis, direcction, event):
+    def on_press(self, axis, direction, event):
         if(axis == AXIS_X):
-            if(direcction > 0):
+            if(direction > 0):
                 self.movingPositiveAxisX = True
             else:
                 self.movingNegativeAxisX = True
         if(axis == AXIS_Y):
-            if(direcction > 0):
+            if(direction > 0):
                 self.movingPositiveAxisY = True
             else:
                 self.movingNegativeAxisY = True
         if(axis == AXIS_Z):
-            if(direcction > 0):
+            if(direction > 0):
                 self.movingPositiveAxisZ = True
             else:
                 self.movingNegativeAxisZ = True
 
-    def on_release(self, axis, direcction, event):
+    def on_release(self, axis, direction, event):
         if(axis == AXIS_X):
-            if(direcction > 0):
+            if(direction > 0):
                 self.movingPositiveAxisX = False
             else:
                 self.movingNegativeAxisX = False
         if(axis == AXIS_Y):
-            if(direcction > 0):
+            if(direction > 0):
                 self.movingPositiveAxisY = False
             else:
                 self.movingNegativeAxisY = False
         if(axis == AXIS_Z):
-            if(direcction > 0):
+            if(direction > 0):
                 self.movingPositiveAxisZ = False
             else:
                 self.movingNegativeAxisZ = False

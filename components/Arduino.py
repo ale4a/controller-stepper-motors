@@ -5,12 +5,19 @@ from constants.constants import AXIS_X, AXIS_Y, AXIS_Z
 MIN_STEP = 0
 MAX_STEP = 0
 # this means that 5% started fast and 90% MAX_SPEED and 5% finish slow
-porcentageToPerfom = 5
-MIN_SPEED = 4000
-MAX_SPEED = 1000
+percentageToPerform = 35
+MIN_SPEED = 7000
+MAX_SPEED = 5000
 
 class Arduino():
+    """
+        This class create connection between python and arduino using pyfirmata
+    """
     def __init__(self, port):
+        """
+            Parameters
+            port: the string that has reference to the port
+        """
         self.port = port
         self.board = pyfirmata.Arduino(port)
         self.iter8 = pyfirmata.util.Iterator(self.board)
@@ -23,16 +30,35 @@ class Arduino():
         self.dirPinY = 6
         self.stepPinZ = 4
         self.dirPinZ = 7
+   
 
-    def _map(self, x, in_min, in_max, out_min, out_max):
-        return int((x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min)
+    def _map(self, value, fromLow, fromHigh, toLow, toHigh):
+        """
+            That is, a value of fromLow would get mapped to toLow, a value of fromHigh to toHigh, values in-between to values in-between, etc.
 
-    def calculateProportion(self, value, porcentage):
-        return value * (porcentage/100)
+            Parameters
+            value: the number to map.
+            fromLow: the lower bound of the value’s current range.
+            fromHigh: the upper bound of the value’s current range.
+            toLow: the lower bound of the value’s target range.
+            toHigh: the upper bound of the value’s target range.
+
+            Returns
+            The mapped value. Data type: long.
+        """
+        return int((value - fromLow) * (toHigh - toLow) / (fromHigh - fromLow) + toLow)
+
+    def calculateProportion(self, value, percentage):
+        """
+            Calculate de percentage of speed give it a number
+        """
+        return value * (percentage/100)
 
     def getSpeed(self, currentStep, totalStep):
         currentSpeed = 0
-        MIN_STEP = self.calculateProportion(totalStep, porcentageToPerfom)
+        MIN_STEP = self.calculateProportion(totalStep, percentageToPerform)
+        if(totalStep < 700):
+            return MIN_SPEED
         if( currentStep <= MIN_STEP ):
             currentSpeed = self._map(currentStep, 0, MIN_STEP, MIN_SPEED, MAX_SPEED)
             return currentSpeed
@@ -48,12 +74,12 @@ class Arduino():
             self.board.digital[directionPin].write(0)
         else:
             self.board.digital[directionPin].write(1)
-
         for x in range(abs(stepsNumberToDo)):
             currentStepDelay = self.getSpeed(x, abs(stepsNumberToDo))
             self.board.digital[stepPin].write(1)
             timing.delayMicroseconds(currentStepDelay)
             self.board.digital[stepPin].write(0)
+            timing.delayMicroseconds(currentStepDelay)
 
     def movePosition(self, axis, steps):
         if(axis == AXIS_X):
@@ -71,7 +97,7 @@ class Arduino():
         if(axis == AXIS_Z):
             return (self.dirPinZ, self.stepPinZ)
 
-    def constansMove(self, axis, direction):
+    def constantMove(self, axis, direction):
         directionPin, stepPin = self.getAxis(axis)
         if (direction > 0):
             self.board.digital[directionPin].write(0)

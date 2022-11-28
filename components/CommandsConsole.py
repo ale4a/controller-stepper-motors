@@ -4,7 +4,7 @@ from tkinter import Tk, Label, Entry
 from tkinter import Frame, Button
 from tkinter import scrolledtext
 import components.Messages as Messages
-from constants.constants import MILLIMITERS
+from constants.constants import MILLIMETERS
 
 class CommandsConsole(Frame):
     def __init__(self, parent, arduino):
@@ -21,7 +21,7 @@ class CommandsConsole(Frame):
 
     def sendCommand(self):
         try:
-            self.commandToSend = self.inputCommand.get() + ";" + MILLIMITERS
+            self.commandToSend = self.inputCommand.get() + ";" + MILLIMETERS
             self.textCommand.insert(END, "> "+self.commandToSend + '\n')
             self.textCommand.config(state=NORMAL)
             stateAnswer = self.arduino.readOptions(self.commandToSend)
@@ -36,7 +36,7 @@ class CommandsConsole(Frame):
 
     def sendCommandWithEnter(self, env):
         try:
-            self.commandToSend = self.inputCommand.get() + ";" + MILLIMITERS
+            self.commandToSend = self.inputCommand.get() + ";" + MILLIMETERS
             self.textCommand.config(state=NORMAL)
             self.textCommand.insert(END, "> "+self.commandToSend + '\n')
             stateAnswer = self.arduino.readOptions(self.commandToSend)

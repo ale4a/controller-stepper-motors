@@ -3,19 +3,21 @@ from tkinter import ttk
 from tkinter import Menu
 import components.ConnectionPort as ConnectionPort
 import components.CommandsConsole as CommandsConsole
+import components.ArduinoControllerSerial as ArduinoControllerSerial
 import components.ArduinoController as ArduinoController
 import components.ArrowControl as ArrowControl
 import components.CoordinateState as CoordinateState
 import Measure as Measure
 import components.Messages as Messages
 
-class ControllerMottors():
+class ControllerMotors():
     def __init__(self):
         self.window = tk.Tk()
         self.window.title("Motor controller")
         self.absPosition = [0, 0, 0]
-        self.absolutePosicionFrame = ttk.LabelFrame(self.window, text="Absolute position", relief=tk.RIDGE)
-        self.statusDisplay = CoordinateState.CoordinateState(self.absolutePosicionFrame, self.absPosition)
+        self.absolutePositionFrame = ttk.LabelFrame(self.window, text="Absolute position", relief=tk.RIDGE)
+        self.statusDisplay = CoordinateState.CoordinateState(self.absolutePositionFrame, self.absPosition)
+        # self.arduino = ArduinoControllerSerial.ArduinoControllerSerial(self.absPosition, self.statusDisplay)
         self.arduino = ArduinoController.ArduinoController(self.absPosition, self.statusDisplay)
         self.messages = Messages.Messages()
         self.measure = Measure.Measure(self.window, self.arduino)
@@ -42,9 +44,9 @@ class ControllerMottors():
         commandsConsoleFrame.grid(row=2, column=1, sticky=tk.E + tk.W + tk.N + tk.S)
         # - - - - - - - - - - - - - - - - - - - - -
         # The Choosing from lists frame
-        self.absolutePosicionFrame.grid(row=1, column=2, sticky=tk.E + tk.W + tk.N + tk.S, padx=6)
+        self.absolutePositionFrame.grid(row=1, column=2, sticky=tk.E + tk.W + tk.N + tk.S, padx=6)
         # - - - - - - - - - - - - - - - - - - - - -
-        # Direcctions
+        # Arrow control entry frame
         arrowControlFrame = ttk.LabelFrame(self.window, text="Arrow control", relief=tk.RIDGE, padding=6)
         ArrowControl.ArrowControl(arrowControlFrame, self.arduino)
         arrowControlFrame.grid(row=2, column=2, padx=6, sticky=tk.E + tk.W + tk.N + tk.S)
@@ -57,11 +59,11 @@ class ControllerMottors():
         self.window.config(menu=menu)
 
     def callbackDestroyFirstProgram(self):
-        if self.messages.askQuestion("Warnimg","Do you want to clase the program?") == "yes":
+        if self.messages.askQuestion("Warning","Do you want to close the program?") == "yes":
             program.window.destroy()
 
 if __name__ == "__main__":
-    program = ControllerMottors()
+    program = ControllerMotors()
     program.window.resizable(False, False)
     program.window.protocol("WM_DELETE_WINDOW",  program.callbackDestroyFirstProgram)
     program.window.mainloop()

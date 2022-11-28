@@ -1,31 +1,80 @@
 """
-steps  - mm
-80      1 mm 
-160     2 mm 
+This data has been obtained thanks a calculate steps to mm for later build a Linear Regression    
+    Review 
+    tableData.excel
 """
+positiveSlope = 90.476
+positiveConstant = -0.4195
 
-MM = 1
-STEPS = 90
+"""ERROR_WHEN_CHANGE_DIRECTION
+    This error is necessary to add when change the direction of motor
+"""
+ERROR_WHEN_CHANGE_DIRECTION = 18
 
+"""ConvertStepsToMM
+    Transform steps to mm with round 2 decimals using inverse function of Linear Regression
+
+    Parameters
+        steps: millimeters that you want to convert
+    Returns
+        number with 2 decimal
+"""
 def convertStepsToMM(steps):
-    return round((steps * MM) / STEPS, 2)
+    res = (steps - positiveConstant) / positiveSlope
+    return round(res, 2)
 
-def convertMMToSteps(mm):
-    return int((mm * STEPS) / MM )
+"""ConvertMMToSteps
+    Transform millimeters to steps in integer number using Linear Regression
 
-def isFloatNumber(NumberString):
-    NumberString = NumberString.replace('-','',1)
-    return NumberString.replace('.','',1).isdigit() and NumberString.count('.') < 2
+    Parameters
+        millimeters: number
+    Returns
+        Integer number
+"""
+def convertMMToSteps(millimeters):
+    res = positiveSlope * millimeters + positiveConstant
+    return int(round(res))
 
-def isIntNumber(NumberString):
-    NumberString = NumberString.replace('-','',1)
-    return NumberString.isdigit()
+"""isFloatNumber
+    Verify if a string can be a float number 
+    Parameters
+        numberString: string 
+    Returns
+        True or False
+"""
+def isFloatNumber(numberString):
+    numberString = numberString.replace('-','',1)
+    return numberString.replace('.','',1).isdigit() and numberString.count('.') < 2
 
-# Function verify if is int or float number
+"""isIntNumber
+    Verify if a string can be a int number 
+    Parameters
+        numberString: string 
+    Returns
+        True or False
+"""
+def isIntNumber(numberString):
+    numberString = numberString.replace('-','',1)
+    return numberString.isdigit()
+
+"""isNumber
+    Verify if a string can be a int number or float number 
+    Parameters
+        number: string
+    Returns
+        True or False
+"""
 def isNumber(number):
     return isIntNumber(number) or isFloatNumber(number)
 
-# Function that permits convert String into number
+"""convertStringToNumber
+    convert string number in int or float number
+    Parameters
+        number: string
+    Returns
+        float or int number
+
+"""
 def convertStringToNumber(number):
     if(isIntNumber(number)):
         return int(number)
