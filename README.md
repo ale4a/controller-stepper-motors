@@ -2,8 +2,8 @@
 This construction of an automatic measuring station with a 3 axis scanner for ultrasonic examination of samples in transmission and reflection.
 
 
+#
 ## Installation
-
 This project is working with 
 - `python 3.11.0`
 - `pyFirmata` https://pypi.org/project/pyFirmata/
@@ -48,11 +48,21 @@ Now that the program is uploaded, you can remove the USB cable and disconnect yo
 ### Start the project execute `index.py`
 
 
+
+# 
+## How Calibrate
+How Calibrate
+# 
+## Control Panel
+Control Panel
+#
+## Resources
+- [template GUI](https://runestone.academy/ns/books/published/thinkcspy/GUIandEventDrivenProgramming/03_widgets.html)
+- [environments in VSC](https://code.visualstudio.com/docs/python/environments) 
+# 
 ## Authors
+[@ale4a](https://www.github.com/ale4a) Alejandro Alvarez
 
-- [@ale4a](https://www.github.com/ale4a) Alejandro Alvarez
 
 
-# https://runestone.academy/ns/books/published/thinkcspy/GUIandEventDrivenProgramming/03_widgets.html
-# read about change env
-# https://code.visualstudio.com/docs/python/environments
+

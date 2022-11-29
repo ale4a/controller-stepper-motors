@@ -1,3 +1,4 @@
+import os.path 
 import tkinter as tk
 from tkinter import ttk
 from tkinter import Menu
@@ -9,10 +10,8 @@ import components.ArrowControl as ArrowControl
 import components.CoordinateState as CoordinateState
 import Measure as Measure
 import components.Messages as Messages
-import os.path
+from constants.constants import NAME_FILE, SEPARATOR_OPEN_FILE
 
-nameFile = "currentPosition.txt"
-separator = ";"
 class ControllerMotors():
     def __init__(self):
         self.window = tk.Tk()
@@ -36,10 +35,10 @@ class ControllerMotors():
     def readDataFile(self):
         axisX, axisY, axisZ = (0, 0, 0)
         try:
-            if os.path.isfile(nameFile):
-                with open(nameFile, "r") as f:
+            if os.path.isfile(NAME_FILE):
+                with open(NAME_FILE, "r") as f:
                     lines = f.readlines()
-                lines = lines[0].split(separator)
+                lines = lines[0].split(SEPARATOR_OPEN_FILE)
                 axisX = int(lines[0])
                 axisY = int(lines[1])
                 axisZ = int(lines[2])
@@ -51,11 +50,11 @@ class ControllerMotors():
         This function write data about the current position
     """
     def writeDataFile(self):
-        file = open(nameFile, "w")
+        file = open(NAME_FILE, "w")
         file.write(str(self.absPosition[0]))
-        file.write(separator)
+        file.write(SEPARATOR_OPEN_FILE)
         file.write(str(self.absPosition[1]))
-        file.write(separator)
+        file.write(SEPARATOR_OPEN_FILE)
         file.write(str(self.absPosition[2]))
         file.close()
         

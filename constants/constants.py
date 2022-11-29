@@ -7,3 +7,6 @@ RELATIVE = "RELATIVE"
 ABSOLUTE = "ABSOLUTE"
 MILLIMETERS = "mm"
 STEPS = "steps"
+
+NAME_FILE = "currentPosition.txt"
+SEPARATOR_OPEN_FILE = ";"
