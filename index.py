@@ -9,20 +9,56 @@ import components.ArrowControl as ArrowControl
 import components.CoordinateState as CoordinateState
 import Measure as Measure
 import components.Messages as Messages
+import os.path
 
+nameFile = "currentPosition.txt"
+separator = ";"
 class ControllerMotors():
     def __init__(self):
         self.window = tk.Tk()
         self.window.title("Motor controller")
-        self.absPosition = [0, 0, 0]
+        self.absPosition = self.readDataFile()
         self.absolutePositionFrame = ttk.LabelFrame(self.window, text="Absolute position", relief=tk.RIDGE)
         self.statusDisplay = CoordinateState.CoordinateState(self.absolutePositionFrame, self.absPosition)
+        # This project is using the pyfirmata connection, it is possible to used serial connection enabling ArduinoControllerSerial and comment ArduinoController
         # self.arduino = ArduinoControllerSerial.ArduinoControllerSerial(self.absPosition, self.statusDisplay)
         self.arduino = ArduinoController.ArduinoController(self.absPosition, self.statusDisplay)
         self.messages = Messages.Messages()
         self.measure = Measure.Measure(self.window, self.arduino)
         self.create_widgets()
 
+    """readDataFile
+        This function read data if there is any current position saved
+
+        Returns
+        [axisX, axisY, axisZ] = [int, int, int]
+    """
+    def readDataFile(self):
+        axisX, axisY, axisZ = (0, 0, 0)
+        try:
+            if os.path.isfile(nameFile):
+                with open(nameFile, "r") as f:
+                    lines = f.readlines()
+                lines = lines[0].split(separator)
+                axisX = int(lines[0])
+                axisY = int(lines[1])
+                axisZ = int(lines[2])
+        except:
+            print("Error with the file currentPosition.txt")
+        return [axisX, axisY, axisZ]
+
+    """writeDataFile
+        This function write data about the current position
+    """
+    def writeDataFile(self):
+        file = open(nameFile, "w")
+        file.write(str(self.absPosition[0]))
+        file.write(separator)
+        file.write(str(self.absPosition[1]))
+        file.write(separator)
+        file.write(str(self.absPosition[2]))
+        file.close()
+        
     def openSecondWindow(self):
         if self.measure is not None:
             self.measure = Measure.Measure(self.window, self.arduino)
@@ -60,6 +96,7 @@ class ControllerMotors():
 
     def callbackDestroyFirstProgram(self):
         if self.messages.askQuestion("Warning","Do you want to close the program?") == "yes":
+            self.writeDataFile()
             program.window.destroy()
 
 if __name__ == "__main__":

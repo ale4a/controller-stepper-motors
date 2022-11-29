@@ -2,7 +2,7 @@ from tkinter.messagebox import showinfo
 from tkinter.messagebox import askquestion
 
 """Messages
-    This class help to create messages with options
+    This class help to create messages in other window with options
 """
 class Messages():
     def __init__(self):
