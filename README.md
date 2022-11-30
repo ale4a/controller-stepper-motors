@@ -10,6 +10,7 @@ This project is working with
 - `python 3.11.0`
 - `pyFirmata` https://pypi.org/project/pyFirmata/
 - `tkinter` https://docs.python.org/3/library/tkinter.html
+- `serial`
 
 ### Clone project
 
@@ -46,6 +47,11 @@ Now that the program is uploaded, you can remove the USB cable and disconnect yo
 ```bash
   pip install pyFirmata
 ```
+
+```bash
+  pip install pyserial
+```
+
 
 ### Start the project execute `index.py`
 
