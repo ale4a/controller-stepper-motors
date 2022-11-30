@@ -61,9 +61,9 @@ Getting closes to linear regression, at the moment one change will work for all 
 # 
 ## Control Panel
 You need to choose the port after that you can control every button in the panel
-![Image 01](img/02_docs.png "Title")
+![Alt text 1](img/02_docs.png "Alt text 1")
 After that online press on button, it is necessary to wait a few minutes to establish the connection
-![Image 01](img/03_docs.png "Title")
+![Alt text 2](img/03_docs.png "Alt text 2")
 
 #
 ## Save current position
@@ -71,6 +71,8 @@ This project save current position using `.txt` if possible to save information 
 #
 ## Resources
 This resources might be helpful if you want to modify the code
+
+- Read docs to operation of arduino
 - [Template GUI](https://runestone.academy/ns/books/published/thinkcspy/GUIandEventDrivenProgramming/03_widgets.html)
 - [What is environments in VSC](https://code.visualstudio.com/docs/python/environments) 
 - [EEPROM](https://docs.arduino.cc/learn/built-in-libraries/eeprom)
