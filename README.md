@@ -79,6 +79,6 @@ This resources might be helpful if you want to modify the code
 ## Authors
 [@ale4a](https://www.github.com/ale4a) Alejandro Alvarez
 
-
+Thank you for the opportunity :)
 
 
