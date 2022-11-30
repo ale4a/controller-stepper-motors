@@ -35,26 +35,25 @@ Make sure your Arduino board is selected in “Tools” > “Port”.
 
 (Check out this StandardFirmata tutorial if you want to know more about Firmata on Arduino.)
 
-Now that the program is uploaded, you can remove the USB cable and disconnect your Arduino.
-
-
 ### Install dependencies
 
+A great recommendation is to create environment variables for installations, go to the resources part of this readme.
+
+First step
 ```bash
   pip install tk
 ```
-
+Second step
 ```bash
   pip install pyFirmata
 ```
-
+Third step
 ```bash
   pip install pyserial
 ```
 
 
 ### Start the project execute `index.py`
-
 
 
 # 
