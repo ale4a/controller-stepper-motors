@@ -13,6 +13,8 @@ import components.Messages as Messages
 from constants.constants import NAME_FILE, SEPARATOR_OPEN_FILE
 
 class ControllerMotors():
+    """
+    """
     def __init__(self):
         self.window = tk.Tk()
         self.window.title("Motor controller")
@@ -26,13 +28,13 @@ class ControllerMotors():
         self.measure = Measure.Measure(self.window, self.arduino)
         self.create_widgets()
 
-    """readDataFile
-        This function read data if there is any current position saved
-
-        Returns
-        [axisX, axisY, axisZ] = [int, int, int]
-    """
     def readDataFile(self):
+        """readDataFile
+            This function read data if there is any current position saved
+
+            Returns
+            [axisX, axisY, axisZ] = [int, int, int]
+        """
         axisX, axisY, axisZ = (0, 0, 0)
         try:
             if os.path.isfile(NAME_FILE):
@@ -46,10 +48,10 @@ class ControllerMotors():
             print("Error with the file currentPosition.txt")
         return [axisX, axisY, axisZ]
 
-    """writeDataFile
-        This function write data about the current position
-    """
     def writeDataFile(self):
+        """writeDataFile
+            This function write data about the current position
+        """
         file = open(NAME_FILE, "w")
         file.write(str(self.absPosition[0]))
         file.write(SEPARATOR_OPEN_FILE)

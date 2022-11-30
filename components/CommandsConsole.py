@@ -7,6 +7,9 @@ import components.Messages as Messages
 from constants.constants import MILLIMETERS
 
 class CommandsConsole(Frame):
+    """
+        This class draw commands console
+    """
     def __init__(self, parent, arduino):
         super().__init__()
         self.arduino = arduino
@@ -71,7 +74,5 @@ class GUI(Frame):
         self.connectionPort = CommandsConsole(self, self.arduino)
         self.connectionPort.pack(side = LEFT)
 
-if __name__ == "__main__":
-    root = Tk()
-    GUI(root).pack(side="top", fill="both", expand=True)
-    root.mainloop()
+if __name__ == '__main__':
+    pass

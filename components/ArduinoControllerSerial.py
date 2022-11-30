@@ -5,10 +5,10 @@ import utils.convert as Convert
 from constants.constants import MILLIMETERS
 from constants.constants import AXIS_X, AXIS_Y, AXIS_Z
 
-"""ArduinoControllerSerial
-This code create a connection between python and arduino using Serial library
-"""
 class ArduinoControllerSerial():
+    """
+        This code create a connection between python and arduino using Serial library
+    """
     def __init__(self, absPosition, statusDisplay):
         super().__init__()
         self.absPosition = absPosition
@@ -17,19 +17,35 @@ class ArduinoControllerSerial():
         self.messages = Messages.Messages()
 
     def setZeroPosition(self):
+        """
+            set zero position and update axis display
+        """
         self.absPosition[0] = 0
         self.absPosition[1] = 0
         self.absPosition[2] = 0
         self.statusDisplay.updateAxis()
 
     def getAbsolutePosition(self):
+        """
+            Return
+                absPosition
+        """
         return self.absPosition
         
     def verifyString(self, stringToVerify):
+        """
+            Verify if the string has 4 position 
+
+            Parameters
+                stringToVerify
+        """
         optionsInputRead = stringToVerify.split(";")
         return len(optionsInputRead) == 4 
 
     def verifyType(self, movement):
+        """
+            Verify type of movement Relative or Absolute
+        """
         return movement == "R" or movement == "A"
     
     def verifyAxis(self, axis):
@@ -39,6 +55,9 @@ class ArduinoControllerSerial():
         return Convert.isNumber(distance)
 
     def convertDistance(self, distance, measure):
+        """
+            This function convert the distance in millimeters
+        """
         distance = Convert.convertStringToNumber(distance)
         if(measure == MILLIMETERS):
             distance = Convert.convertMMToSteps(distance)
@@ -53,6 +72,9 @@ class ArduinoControllerSerial():
         return (axisMovement, typeMovement, stepsMovement, measure)
 
     def connectArduino(self, port, baudrate = 9600):
+        """
+            Connect with the class arduino
+        """
         try:
             self.arduino = serial.Serial(port, baudrate, timeout=.1)
         except:
@@ -60,6 +82,9 @@ class ArduinoControllerSerial():
             print("it is not possible to connect")
 
     def closeConnection(self):
+        """
+            Close the connection with arduino
+        """
         try:
             if self.arduino.isOpen() == True:
                 self.arduino.close()
@@ -71,6 +96,18 @@ class ArduinoControllerSerial():
             print("Do not exist variable arduino declared")
 
     def readOptions(self, valueInput):
+        """
+            Function that read string with the commands necessary to move, 
+            
+            Evaluate 
+                - verify value input is a correct command
+                - relative or absolute movement
+                - if it is necessary to add steps to make up for the mistake
+                - save absolute position
+
+            Parameters:
+                valueInput: commands that you should move
+        """
         time.sleep(0.1)
         if not self.verifyString(valueInput):
             return False
@@ -116,9 +153,10 @@ class ArduinoControllerSerial():
             return True
 
     def constantsMoveController(self, axis, direction):
+        """
+            This function could not be done using serial connection
+        """
         pass
 
 if __name__ == '__main__':
-    arduino = ArduinoControllerSerial()
-    isClose = arduino.readOptions()
-    time.sleep(0.1)
+    pass

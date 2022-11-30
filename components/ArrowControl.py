@@ -12,6 +12,9 @@ from constants.constants import POSITIVE, NEGATIVE
 import utils.convert as Convert
 
 class ArrowControl(Frame):
+    """
+        This class draw all arrow control on panel
+    """
     def __init__(self, parent, arduino):
         super().__init__()
         self.parent = parent
@@ -33,6 +36,13 @@ class ArrowControl(Frame):
         self.createWidgets()
 
     def relativeMovement(self, axis, steps):
+        """
+            Create a line command to send arduino
+
+            Parameters
+                axis
+                steps
+        """
         measure = self.measurementComboboxValue.get()
         res = "R"+ ";" + axis + ";" + str(steps) + ";" + measure
         try:
@@ -43,6 +53,14 @@ class ArrowControl(Frame):
             self.messages.popupShowinfo("Error", e)
 
     def movementAxis(self, axis, direction):
+        """
+            Evaluated in which direction and axis is necessary to move
+
+            Parameters
+                axis
+                direction
+
+        """
         if(axis == AXIS_X):
             if direction == POSITIVE:
                 self.relativeMovement(AXIS_X,self.totalStepsAxisX)
@@ -59,10 +77,16 @@ class ArrowControl(Frame):
             else:
                 self.relativeMovement(AXIS_Z,-self.totalStepsAxisZ)
                 
-    def sendCommand(self):
+    def setPositionCommand(self):
+        """
+            Set position command
+        """
         self.arduino.setZeroPosition()
     
     def resetEntryValuesToSteps(self):
+        """
+            Reset entry values to steps
+        """
         self.totalStepsAxisX = 10
         self.totalStepsAxisY = 10
         self.totalStepsAxisZ = 10
@@ -73,7 +97,7 @@ class ArrowControl(Frame):
         self.stepsValueAxisYEntry.insert(0, self.totalStepsAxisY)
         self.stepsValueAxisZEntry.insert(0, self.totalStepsAxisZ)
 
-    def comboboxChangeMeasurament(self, event):
+    def comboboxChangeMeasurement(self, event):
         if (self.measurementComboboxValue.get() == STEPS):
             self.resetEntryValuesToSteps()
 
@@ -95,14 +119,14 @@ class ArrowControl(Frame):
             "validate": 'all'
         }
 
-        self.sendButton = Button(self.parent, text= "Set position",command = self.sendCommand, width=15)
+        self.sendButton = Button(self.parent, text= "Set position",command = self.setPositionCommand, width=15)
         self.sendButton.grid(row = 0, column = 0, columnspan=3)
         self.measurementComboboxValue = StringVar()
         rateCombobox = Combobox(self.parent, height=4, width = 5, textvariable=self.measurementComboboxValue, justify=CENTER)
         rateCombobox.grid(row = 0, column = 3)
         rateCombobox['values'] = self.measurements
         rateCombobox.current(0)
-        rateCombobox.bind('<<ComboboxSelected>>', self.comboboxChangeMeasurament)
+        rateCombobox.bind('<<ComboboxSelected>>', self.comboboxChangeMeasurement)
         # ---------------------------------------------- X
         self.axisXValue = Label(self.parent, text = "X:", font=fontState)
         self.axisXValue.grid(row = 1, column = 0, **padding)
@@ -166,7 +190,5 @@ class GUI(Frame):
         self.connectionPort = ArrowControl(self)
         self.connectionPort.pack(side = LEFT)
 
-if __name__ == "__main__":
-    root = Tk()
-    GUI(root).pack(side="top", fill="both", expand=True)
-    root.mainloop()
+if __name__ == '__main__':
+    pass

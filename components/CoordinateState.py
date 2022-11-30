@@ -5,6 +5,9 @@ from tkinter import Frame
 import utils.convert as Convert
 
 class CoordinateState(Frame):
+    """
+        This class draw coordinate state
+    """
     def __init__(self, parent, absPosition):
         super().__init__()
         self.parent = parent
@@ -56,7 +59,5 @@ class GUI(Frame):
         self.connectionPort = CoordinateState(self, [243,153,21])
         self.connectionPort.pack(side = LEFT)
 
-if __name__ == "__main__":
-    root = Tk()
-    GUI(root).pack(side="top", fill="both", expand=True)
-    root.mainloop()
+if __name__ == '__main__':
+    pass

@@ -1,7 +1,9 @@
 # Controller stepper motors A4988 using python
 This construction of an automatic measuring station with a 3 axis scanner for ultrasonic examination of samples in transmission and reflection.
 
+This project is stablish a connection with arduino to control 3 motors in 3 axis and is characterized for to have a module to calibrate and have more precision in the movement.
 
+The connection is possible using pyfirmata to control the arduino nevertheless the Serial modules was implemented in the project and if possible to change change `ArduinoController.py` to `ArduinoControllerSerial.py` but it is recommend to keep as it is implemented now.
 #
 ## Installation
 This project is working with 
@@ -12,13 +14,13 @@ This project is working with
 ### Clone project
 
 ```bash
-  git clone https://link-to-project
+  git clone https://github.com/ale4a/controller-stepper-motors
 ```
 
 ### Go to the project directory
 
 ```bash
-  cd my-project
+  cd controller-stepper-motors
 ```
 
 ### Run StandardFirmata on your Arduino board
@@ -51,14 +53,28 @@ Now that the program is uploaded, you can remove the USB cable and disconnect yo
 
 # 
 ## How Calibrate
-How Calibrate
+If you want to calculate the axis you need to good `convert.py` and change
+- positiveSlope
+- positiveConstant
+- ERROR_WHEN_CHANGE_DIRECTION
+Getting closes to linear regression, at the moment one change will work for all axis but it is possible to change
 # 
 ## Control Panel
-Control Panel
+You need to choose the port after that you can control every button in the panel
+![Image 01](img/02_docs.png "Title")
+After that online press on button, it is necessary to wait a few minutes to establish the connection
+![Image 01](img/03_docs.png "Title")
+
+#
+## Save current position
+This project save current position using `.txt` if possible to save information in EEPROM but for simplicity it was preferred to use this method
 #
 ## Resources
-- [template GUI](https://runestone.academy/ns/books/published/thinkcspy/GUIandEventDrivenProgramming/03_widgets.html)
-- [environments in VSC](https://code.visualstudio.com/docs/python/environments) 
+This resources might be helpful if you want to modify the code
+- [Template GUI](https://runestone.academy/ns/books/published/thinkcspy/GUIandEventDrivenProgramming/03_widgets.html)
+- [What is environments in VSC](https://code.visualstudio.com/docs/python/environments) 
+- [EEPROM](https://docs.arduino.cc/learn/built-in-libraries/eeprom)
+- [EEPROM with pyfirmata](https://arduino.stackexchange.com/questions/28971/can-you-save-data-to-eeprom-using-firmata)
 # 
 ## Authors
 [@ale4a](https://www.github.com/ale4a) Alejandro Alvarez

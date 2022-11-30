@@ -1,10 +1,10 @@
 from tkinter.messagebox import showinfo
 from tkinter.messagebox import askquestion
 
-"""Messages
-    This class help to create messages in other window with options
-"""
 class Messages():
+    """
+        This class help to create messages in other window with options
+    """
     def __init__(self):
         pass
 
@@ -14,3 +14,5 @@ class Messages():
     def askQuestion(self, title, description):
         return askquestion(title, description)
         
+if __name__ == '__main__':
+    pass

@@ -6,6 +6,9 @@ from constants.constants import MILLIMETERS
 from constants.constants import AXIS_X, AXIS_Y, AXIS_Z
 
 class ArduinoController():
+    """
+        This class is an intermediary between python and arduino
+    """
     def __init__(self, absPosition, statusDisplay):
         super().__init__()
         self.absPosition = absPosition
@@ -19,19 +22,35 @@ class ArduinoController():
         self.messages = Messages.Messages()
 
     def setZeroPosition(self):
+        """
+            set zero position and update axis display
+        """
         self.absPosition[0] = 0
         self.absPosition[1] = 0
         self.absPosition[2] = 0
         self.statusDisplay.updateAxis()
 
     def getAbsolutePosition(self):
+        """
+            Return
+                absPosition
+        """
         return self.absPosition
         
     def verifyString(self, stringToVerify):
+        """
+            Verify if the string has 4 position 
+
+            Parameters
+                stringToVerify
+        """
         optionsInputRead = stringToVerify.split(";")
         return len(optionsInputRead) == 4
 
     def verifyType(self, movement):
+        """
+            Verify type of movement Relative or Absolute
+        """
         return movement == "R" or movement == "A"
     
     def verifyAxis(self, axis):
@@ -41,6 +60,9 @@ class ArduinoController():
         return Convert.isNumber(distance)
 
     def convertDistance(self, distance, measure):
+        """
+            This function convert the distance in millimeters
+        """
         distance = Convert.convertStringToNumber(distance)
         if(measure == MILLIMETERS):
             distance = Convert.convertMMToSteps(distance)
@@ -55,6 +77,9 @@ class ArduinoController():
         return (axisMovement, typeMovement, stepsMovement, measure)
 
     def connectArduino(self, port, baudrate):
+        """
+            Connect with the class arduino
+        """
         try:
             self.arduino = Arduino.Arduino(port)
         except:
@@ -62,6 +87,9 @@ class ArduinoController():
             print("it is not possible to connect")
 
     def closeConnection(self):
+        """
+            Close the connection with arduino
+        """
         try:
             self.arduino.isClose()
         except:
@@ -69,6 +97,15 @@ class ArduinoController():
             print("Do not exist variable arduino declared")
 
     def addErrorForChangeOfTurn(self, distance, currentMovement, axis):
+        """
+            When you are using the motors and change the direction in the last movement is necessary to add steps or error to counteract loss of motion
+            Parameters
+                distance: distance that you need to move
+                currentMovement: current movement, positive or negative 
+                axis: axis that is being evaluated
+            Return
+                distance + error
+        """
         axisNumber = 0
         if(axis == AXIS_X):
             axisNumber = 0
@@ -84,6 +121,18 @@ class ArduinoController():
         return distance
         
     def readOptions(self, valueInput):
+        """
+            Function that read string with the commands necessary to move, 
+            
+            Evaluate 
+                - verify value input is a correct command
+                - relative or absolute movement
+                - if it is necessary to add steps to make up for the mistake
+                - save absolute position
+
+            Parameters:
+                valueInput: commands that you should move
+        """
         time.sleep(0.1)
         if not self.verifyString(valueInput):
             return False
@@ -120,6 +169,7 @@ class ArduinoController():
                 self.lastPosition[2] = currentMovement
             self.statusDisplay.updateAxis()
             return True
+
         elif typeMovement =="A":
             time.sleep(0.1)
             if axisMovement == AXIS_X:
@@ -149,6 +199,13 @@ class ArduinoController():
             return True
 
     def constantMoveController(self, axis, direction):
+        """
+            Function that helps to move constant in a determine axis
+
+            Parameters
+                axis: axis that is being evaluated
+                direction: positive or negative
+        """
         self.arduino.constantMove(axis, direction)
         self.statusDisplay.updateAxis()
 

@@ -8,6 +8,9 @@ import glob
 import serial
 
 class ConnectionPort(Frame):
+    """
+        This class draw connection port
+    """
     def __init__(self, parent, arduino):
         super().__init__()
         self.parent = parent
@@ -119,7 +122,5 @@ class GUI(Frame):
         self.connectionPort = ConnectionPort(self, '*ARDUINO*')
         self.connectionPort.pack(side = LEFT)
 
-if __name__ == "__main__":
-    root = Tk()
-    GUI(root).pack(side="top", fill="both", expand=True)
-    root.mainloop()
+if __name__ == '__main__':
+    pass

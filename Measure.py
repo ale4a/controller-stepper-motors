@@ -128,3 +128,6 @@ class Measure():
                 self.movingPositiveAxisZ = False
             else:
                 self.movingNegativeAxisZ = False
+
+if __name__ == '__main__':
+    pass
