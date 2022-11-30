@@ -61,9 +61,9 @@ Getting closes to linear regression, at the moment one change will work for all 
 # 
 ## Control Panel
 You need to choose the port after that you can control every button in the panel
-![Alt text 1](img/02_docs.png "Alt text 1")
+![Alt text 1](img/02_docs_1.png "Alt text 1")
 After that online press on button, it is necessary to wait a few minutes to establish the connection
-![Alt text 2](img/03_docs.png "Alt text 2")
+![Alt text 2](img/03_docs_1.png "Alt text 2")
 
 #
 ## Save current position
