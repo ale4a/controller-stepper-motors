@@ -58,6 +58,8 @@ If you want to calculate the axis you need to good `convert.py` and change
 - positiveConstant
 - ERROR_WHEN_CHANGE_DIRECTION
 Getting closes to linear regression, at the moment one change will work for all axis but it is possible to change
+
+If it is necessary review `TableData.xlsx` to understand how to get positiveSlope and positiveConstant
 # 
 ## Control Panel
 You need to choose the port after that you can control every button in the panel
